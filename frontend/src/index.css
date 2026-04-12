@@ -77,6 +77,13 @@ body {
   margin: 0;
 }
 
+
+ul{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 h1,
 h2 {
   font-family: var(--heading);
@@ -115,6 +122,10 @@ textarea {
   font-size: 14px;
   outline: none;
   background-color: var(--bg);
+}
+
+.text-grey{
+  color: var(--text-grey);
 }
 
 .text-s{

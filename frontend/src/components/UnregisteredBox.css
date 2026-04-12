@@ -1,0 +1,17 @@
+.unregistered-btn-box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+
+.unregistered-btn-box a{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    flex: 1;
+    width: 100%;
+}

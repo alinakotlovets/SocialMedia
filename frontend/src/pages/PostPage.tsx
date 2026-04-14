@@ -6,7 +6,10 @@ import {Modal} from "../components/ui/Modal.tsx";
 import {AddEditPostForm} from "../components/AddEditPostForm.tsx";
 import {PostItem} from "../components/PostItem.tsx";
 import {useCurrentUser} from "../utils/useCurrentUser.ts";
+import {WhatsNewBox} from "../components/WhatsNewBox.tsx";
 import "./HomePage.css";
+import "./PostPage.css";
+
 export function PostPage(){
     const { postId } = useParams();
 
@@ -15,7 +18,8 @@ export function PostPage(){
     const [post, setPost] = useState<Post | null>(null);
     const [isAddEdit, setIsAddEdit] = useState<boolean>(false);
     const [editingPost, setEditingPost] = useState<Post | null>(null);
-    const [replies, setReplies] = useState<Post[]>([])
+    const [replies, setReplies] = useState<Post[]>([]);
+    const [parentPost, setParentPost] = useState<Post | null>(null);
 
     const currentUser = useCurrentUser();
     const navigate = useNavigate();
@@ -28,11 +32,18 @@ export function PostPage(){
             if(response.errors) setErrors(response.errors);
             if(response.post) {
                 setPost(response.post);
+                if (response.post.parentId) {
+                    const parentRes = await Client(`/posts/${response.post.parentId}`, "GET");
+                    if (parentRes.post) setParentPost(parentRes.post);
+                } else {
+                    setParentPost(null);
+                }
             }
         }
         getPost();
         setLoading((prev)=>({...prev, post:false}));
-    }, []);
+    }, [postId]);
+
 
     useEffect(() => {
         setLoading((prev)=>({...prev, replies:true}))
@@ -43,11 +54,11 @@ export function PostPage(){
             if(response.replies) setReplies(response.replies);
 
         }
-
         getReplies();
         setLoading((prev)=>({...prev, replies:false}))
 
     }, [post]);
+
 
     return(
         <div className="content-box">
@@ -74,6 +85,16 @@ export function PostPage(){
                                              setIsAddEditPost={setIsAddEdit}/>
                         </Modal>
                     )}
+
+                    {parentPost && (
+                        <PostItem
+                            currentUser={currentUser}
+                            post={parentPost}
+                            onEdit={(p) => { setEditingPost(p); setIsAddEdit(true); }}
+                            onDelete={() => navigate("/")}
+                            hasThread={true}
+                        />
+                    )}
                     {post && (
                         <PostItem currentUser={currentUser}
                                   post={post}
@@ -85,30 +106,24 @@ export function PostPage(){
                     )}
 
                     { post &&  currentUser &&(
-                        <div className="whats-new-box">
-                            <div className="whats-new-left-box">
-                                {currentUser.avatar &&(
-                                    <img src={currentUser.avatar}
-                                         alt={currentUser.username + " avatar"}/>
-                                )}
-                                <p className="text-s text-grey"
-                                   onClick={()=>{setIsAddEdit(true); setEditingPost(null)}}>Reply...</p>
-                            </div>
-                            <button className="button button-md button-outline"
-                                    onClick={()=> {setIsAddEdit(true); setEditingPost(null)}}>Post</button>
-                        </div>
+                        <WhatsNewBox currentUser={currentUser} text={"Reply..."} onClick={()=>{setIsAddEdit(true); setEditingPost(null)}}/>
                     )}
+
                     <div className="replies-box">
+                        {loading.replies && (<h3>Loading...</h3>)}
                         {loading.replies === false && replies.length === 0 &&(
-                            <h4>There no comment yet</h4>
+                            <div className="empty-replies">
+                                <h4>There no comment yet</h4>
+                            </div>
                         )}
                         {loading.replies === false && replies.length>0 && replies.map((r)=>(
                             <PostItem currentUser={currentUser}
                                       post={r}
                                       onEdit={()=>{
-                                          setEditingPost(post);
+                                          setEditingPost(r);
                                           setIsAddEdit(true)
                                       }}
+                                      onClick={() => navigate(`/post/${r.id}`)}
                                       onDelete={()=> setReplies(replies.filter((repl)=> repl.id !== r.id))}/>
                         ))}
                     </div>

@@ -8,6 +8,26 @@
     padding: 16px 20px;
 }
 
+.post-list-item.has-thread {
+    border-bottom: none;
+}
+
+.post-item-img-wrapper {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.has-thread .post-item-img-wrapper::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 54px;
+    width: 2px;
+    bottom: -50px;
+    background-color: var(--border);
+}
+
 .post-item-img{
     width: 50px;
     height: 50px;

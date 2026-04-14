@@ -8,6 +8,7 @@ import {formatDate} from "../utils/formatDate.ts";
 import More from "../assets/more.png"
 import liked from "../assets/liked.png"
 import unliked from  "../assets/unliked.png"
+import repliesImg from "../assets/replies.png"
 import {Modal} from "./ui/Modal.tsx";
 import {UnregisteredBox} from "./UnregisteredBox.tsx";
 import {useNavigate} from "react-router-dom";
@@ -16,10 +17,12 @@ type PostItemProps = {
     currentUser: User | null,
     post:Post,
     onEdit: (post: Post) => void
-    onDelete: (id:number)=>void
+    onDelete: (id:number)=>void,
+    onClick?: () => void,
+    hasThread?: boolean
 }
 
-export function PostItem({currentUser, post, onEdit, onDelete}:PostItemProps){
+export function PostItem({currentUser, post, onEdit, onDelete, onClick, hasThread}:PostItemProps){
 
     const menuRef = useRef<HTMLDivElement>(null);
     const [errors, setErrors] = useState<string[]>([]);
@@ -71,8 +74,8 @@ export function PostItem({currentUser, post, onEdit, onDelete}:PostItemProps){
     const navigate = useNavigate();
 
     return(
-       <li className="post-list-item"
-           onClick={()=> navigate(`/post/${post.id}`)}>
+       <li className={`post-list-item ${hasThread ? "has-thread" : ""}`}
+           onClick={()=> onClick ? onClick() : navigate(`/post/${post.id}`)}>
            {showLoginForm && (
                <Modal onClose={()=>setShowLoginForm(false)} closeOnOverlayClick={true}>
                    <UnregisteredBox/>
@@ -85,8 +88,10 @@ export function PostItem({currentUser, post, onEdit, onDelete}:PostItemProps){
                    )}
                </ul>
            )}
+           <div className="post-item-img-wrapper">
            <img  className="post-item-img" src={post.user.avatar || defaultAvatar}
                 alt={post.user.username + " avatar"}/>
+           </div>
            <div className="post-item-content">
                <div className="post-item-top-box">
                    <div className="post-item-header">
@@ -127,6 +132,11 @@ export function PostItem({currentUser, post, onEdit, onDelete}:PostItemProps){
                    <img className={like ? "liked-post-img" : "unlike-post-img"}
                         src={like ? liked : unliked} width={15} />
                    <p className="text-grey text-s">{likeCount}</p>
+                   </button>
+                   <button className="like-btn button">
+                       <img className="unlike-post-img"
+                            src={repliesImg} width={15} />
+                       <p className="text-grey text-s">{post._count.replies}</p>
                    </button>
                </div>
            </div>

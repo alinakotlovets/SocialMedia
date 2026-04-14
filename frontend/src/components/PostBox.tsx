@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import {Modal} from "./ui/Modal.tsx";
 import {AddEditPostForm} from "./AddEditPostForm.tsx";
 import {PostItem} from "./PostItem.tsx";
+import {WhatsNewBox} from "./WhatsNewBox.tsx";
 import "./PostBox.css"
 import type {Post} from "../types/Post.ts";
 import Client from "../api/client.ts";
@@ -49,18 +50,7 @@ export function PostBox({currentUser}:PostBoxProps){
             )}
 
             {currentUser &&(
-                <div className="whats-new-box">
-                    <div className="whats-new-left-box">
-                        {currentUser.avatar &&(
-                            <img src={currentUser.avatar}
-                                 alt={currentUser.username + " avatar"}/>
-                        )}
-                        <p className="text-s text-grey"
-                           onClick={()=>{setIsAddEditPost(true)}}>Whats new?</p>
-                    </div>
-                    <button className="button button-md button-outline"
-                        onClick={()=>setIsAddEditPost(true)}>Post</button>
-                </div>
+                <WhatsNewBox currentUser={currentUser} text={"Whats new?"} onClick={()=>setIsAddEditPost(true)}/>
             )}
 
             <div>

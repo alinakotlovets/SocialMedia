@@ -35,8 +35,14 @@ export function PostBox({currentUser}:PostBoxProps){
                     <AddEditPostForm mode={editingPost ? "edit" : "add"}
                                      post={editingPost}
                                      currentUser={currentUser}
-                                     setPosts={setPosts}
-                                     posts={posts}
+                                     onSuccess={(newPost) => {
+                                         if (editingPost) {
+                                             setPosts(posts.map(p => p.id === newPost.id ? newPost : p));
+                                         } else {
+                                             setPosts([newPost, ...posts]);
+                                         }
+                                         setEditingPost(null);
+                                     }}
                                      setIsAddEditPost={setIsAddEditPost}
                     />
                 </Modal>
@@ -50,7 +56,7 @@ export function PostBox({currentUser}:PostBoxProps){
                                  alt={currentUser.username + " avatar"}/>
                         )}
                         <p className="text-s text-grey"
-                           onClick={()=>setIsAddEditPost(true)}>Whats new?</p>
+                           onClick={()=>{setIsAddEditPost(true)}}>Whats new?</p>
                     </div>
                     <button className="button button-md button-outline"
                         onClick={()=>setIsAddEditPost(true)}>Post</button>

@@ -3,11 +3,17 @@ import type {Request, Response} from "express";
 import {getUserId} from "../utils/getUserId";
 import {parseId} from "../utils/parseId";
 import {AppError} from "../utils/AppError";
+import {parseOptionalId} from "../utils/parseOptionalId";
 
 export async function addPost(req:Request, res:Response){
     const userId = getUserId(req);
     const {text} = req.body;
-    const post = await postServices.createPost(text, userId);
+    const postId = parseOptionalId(req.params.postId, "Post id ");
+    if(postId){
+        const post = await postServices.getPostById(postId, userId);
+        if(!post) throw new AppError(404, "Post with this id not found");
+    }
+    const post = await postServices.createPost(text, userId, postId);
     res.status(201).json({post});
 }
 
@@ -16,7 +22,7 @@ export async function editPost(req:Request, res:Response){
     const postId = parseId(req.params.postId, "Post id");
 
     const userId = getUserId(req);
-    const postFromDb = await postServices.getPostById(postId);
+    const postFromDb = await postServices.getPostById(postId, userId);
     if (!postFromDb) throw new AppError(404, "Post with this id not found");
     if(postFromDb.userId !== userId) throw new AppError(403, "You not author of this post");
 
@@ -27,7 +33,7 @@ export async function editPost(req:Request, res:Response){
 export async function deletePost(req:Request, res:Response){
     const postId = parseId(req.params.postId, "Post id");
     const userId = getUserId(req);
-    const postFromDb = await postServices.getPostById(postId);
+    const postFromDb = await postServices.getPostById(postId, userId);
     if (!postFromDb) throw new AppError(404, "Post with this id not found");
     if(postFromDb.userId !== userId) throw new AppError(403, "You not author of this post");
 
@@ -37,7 +43,8 @@ export async function deletePost(req:Request, res:Response){
 
 export async function getPosts(req:Request, res:Response){
     const cursorId = req.query.cursorId ? Number(req.query.cursorId) : null;
-    const posts = await postServices.getPosts(cursorId);
+    const userId = req.user ? req.user.id : null
+    const posts = await postServices.getPosts(cursorId, userId);
     res.status(200).json({posts});
 }
 
@@ -46,4 +53,22 @@ export async function getUserPost(req:Request, res:Response){
     const userId = getUserId(req);
     const posts = await postServices.getPostsByUserId(userId, cursorId);
     res.status(200).json({posts});
+}
+
+export async function getPostReplies(req:Request, res:Response){
+    const postId = parseId(req.params.postId, "Post id ");
+    const cursorId = parseOptionalId(req.query.cursorId, "Cursor id ");
+    const userId = req.user ? req.user.id : null
+    const post = await postServices.getPostById(postId, userId);
+    if(!post) throw new AppError(404, "Post not found");
+    const replies = await postServices.getPostReplies(postId, userId, cursorId);
+    res.status(200).json({replies});
+}
+
+export async function getPostById(req:Request, res:Response){
+    const postId = parseId(req.params.postId, "Post id ");
+    const userId = req.user ? req.user.id : null;
+    const post = await postServices.getPostById(postId, userId);
+    if(!post) throw new AppError(404, "Post not found");
+    res.status(200).json({post});
 }

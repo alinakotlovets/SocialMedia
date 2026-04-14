@@ -1,0 +1,67 @@
+.add-edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px 20px;
+}
+
+.add-edit-form-body {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.add-edit-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 100px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.add-edit-main {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.add-edit-user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.add-edit-textarea {
+    width: 100%;
+    min-height: 80px;
+    resize: none;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 16px;
+    color: var(--text-grey);
+    line-height: 1.5;
+    padding: 5px;
+}
+
+.add-edit-textarea::placeholder {
+    color: var(--text-grey);
+}
+
+.add-edit-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+}
+
+.add-edit-errors {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    color: var(--danger, #e24b4a);
+    flex: 1;
+}

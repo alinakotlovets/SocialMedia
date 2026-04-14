@@ -21,3 +21,77 @@
     justify-content: start;
     gap: 10px;
 }
+
+.post-item-top-box{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.more-btn{
+    background-color: transparent;
+}
+
+.more-btn img{
+    width: 20px;
+    filter: invert(60%);
+}
+
+.post-item-content {
+    width: 100%;
+    padding-left: 10px;
+}
+
+
+.more-menu-wrapper {
+    position: relative;
+}
+
+.more-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    display: flex;
+    flex-direction: column;
+    min-width: 120px;
+    z-index: 10;
+    overflow: hidden;
+}
+
+.more-menu button {
+    background: transparent;
+    border: none;
+    padding: 10px 16px;
+    text-align: start;
+    cursor: pointer;
+    width: 100%;
+}
+
+.more-menu button:hover {
+    background-color: var(--border);
+}
+
+
+.unlike-post-img{
+    filter: invert(60%);
+}
+
+.post-item-action-box{
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    margin-top: 7px;
+}
+
+.like-btn{
+    display: flex;
+    align-items: start;
+    justify-content: start;
+    gap: 3px;
+    background-color: var(--bg);
+}

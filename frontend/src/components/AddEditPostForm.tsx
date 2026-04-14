@@ -3,20 +3,19 @@ import type {User} from "../types/User.ts";
 import {useState} from "react";
 import defaultAvatar from "../assets/defaultAvatar.png";
 import Client from "../api/client.ts";
+import "./AddEditPostForm.css"
 
 type AddEditPostFormProps={
-    mode: "add" | "edit",
+    mode: "add" | "edit" | "reply",
     post: Post | null,
     currentUser: User | null,
-    setPosts: (value: Post[])=>void,
-    posts: Post[],
+    onSuccess: (post: Post) => void,
     setIsAddEditPost: (value: boolean)=>void
 }
-export function AddEditPostForm({mode, post, currentUser, setPosts, posts,
+export function AddEditPostForm({mode, post, currentUser, onSuccess,
                                     setIsAddEditPost}:AddEditPostFormProps){
     if (!currentUser) return null;
-    console.log(post);
-    const [inputValue, setInputValue] = useState(post?.text ?? "");
+    const [inputValue, setInputValue] = useState((mode === "edit" && post?.text) ? post?.text : "");
     const [errors, setErrors] = useState<string[]>([]);
     async function handleAddEditPost() {
         setErrors([]);
@@ -27,9 +26,16 @@ export function AddEditPostForm({mode, post, currentUser, setPosts, posts,
             if(result.errors) setErrors(result.errors);
 
             if(result.post){
-                const newPost = [result.post,...posts];
-                setPosts(newPost);
+                onSuccess(result.post);
                 setInputValue("");
+                setIsAddEditPost(false);
+            }
+        }
+        if(mode === "reply" && post) {
+            const result= await  Client(`/posts/${post.id}/replies`, "POST", JSON.stringify({text: inputValue}));
+            if (result.errors) setErrors(result.errors);
+            if (result.post){
+                onSuccess(result.post)
                 setIsAddEditPost(false);
             }
         }
@@ -38,29 +44,49 @@ export function AddEditPostForm({mode, post, currentUser, setPosts, posts,
                 "PUT", JSON.stringify({text: inputValue}));
             if (result.errors) setErrors(result.errors);
             if (result.post) {
-                setPosts(posts.map(p => p.id === post.id ? result.post : p));
+                onSuccess(result.post);
                 setIsAddEditPost(false);
             }
         }
     }
 
-    return(
-        <div>
-                <div className="whats-new-left-box">
-                    <img src={currentUser.avatar || defaultAvatar}
-                         alt={currentUser.username + " avatar"}/>
+    return (
+        <div className="add-edit-form">
+            <div className="add-edit-form-body">
+                <img
+                    className="add-edit-avatar"
+                    src={currentUser.avatar || defaultAvatar}
+                    alt={currentUser.username + " avatar"}
+                />
+                <div className="add-edit-main">
+                    <div className="add-edit-user">
+                        <h4>{currentUser.displayName}</h4>
+                        <p className="text-s text-grey">@{currentUser.username}</p>
+                    </div>
+                    <textarea
+                        className="add-edit-textarea"
+                        placeholder="What's happening?"
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                    />
                 </div>
-                <textarea
-                       value={inputValue}
-                       onChange={(e)=>setInputValue(e.target.value)}/>
-                <button className="button button-md button-outline" onClick={handleAddEditPost}>Post</button>
-            {errors.length>0 &&(
-                <ul>
-                    {errors.map((e, i)=>
-                    <li key={i}>{e}</li>
-                    )}
-                </ul>
-            )}
+            </div>
+
+            <div className="add-edit-footer">
+                {errors.length > 0 && (
+                    <ul className="add-edit-errors">
+                        {errors.map((e, i) => (
+                            <li className="text-s" key={i}>{e}</li>
+                        ))}
+                    </ul>
+                )}
+                <button
+                    className="button button-md button-outline"
+                    onClick={handleAddEditPost}
+                >
+                    {mode === "edit" ? "Save" : "Post"}
+                </button>
+            </div>
         </div>
     )
 }

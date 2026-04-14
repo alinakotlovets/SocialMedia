@@ -1,23 +1,9 @@
 import {PostBox} from "../components/PostBox.tsx";
-import {useEffect, useState} from "react";
-import Client from "../api/client.ts";
-import type {User} from "../types/User.ts";
 import {UnregisteredBox} from "../components/UnregisteredBox.tsx";
 import "./HomePage.css"
+import {useCurrentUser} from "../utils/useCurrentUser.ts";
 export function HomePage(){
-    const [currentUser, setCurrentUser] = useState<User|null>(null);
-
-    useEffect(()=>{
-        async function getCurrentUser(){
-            try {
-                const user = await Client("/user", "GET");
-                if(user.user) setCurrentUser(user.user);
-            } catch (e) {
-                setCurrentUser(null);
-            }
-        }
-        getCurrentUser();
-    }, []);
+    const currentUser = useCurrentUser();
 
     return(
         <div className="content-box">
@@ -25,7 +11,9 @@ export function HomePage(){
                 <PostBox currentUser={currentUser}/>
 
                 {!currentUser &&(
-                    <UnregisteredBox/>
+                    <div className="unregistered-box">
+                        <UnregisteredBox/>
+                    </div>
                 )}
             </div>
         </div>

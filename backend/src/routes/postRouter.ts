@@ -22,6 +22,6 @@ postRouter.post("/:postId/replies",verifyToken, postValidation, validateFields, 
 postRouter.post("/", verifyToken, postValidation, validateFields, addPost);
 postRouter.get("/:postId/replies", optionalAuth, getPostReplies);
 postRouter.get("/:postId", optionalAuth, getPostById);
-postRouter.get("/user", verifyToken, getUserPost);
+postRouter.get("/user/:userId", optionalAuth, getUserPost);
 postRouter.get("/", optionalAuth, getPosts);
 export default postRouter;

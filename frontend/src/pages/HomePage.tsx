@@ -6,16 +6,15 @@ export function HomePage(){
     const currentUser = useCurrentUser();
 
     return(
-        <div className="content-box">
-            <div className="home-page-box">
-                <PostBox currentUser={currentUser}/>
+        <>
+            <PostBox currentUser={currentUser}/>
 
-                {!currentUser &&(
-                    <div className="unregistered-box">
-                        <UnregisteredBox/>
-                    </div>
-                )}
-            </div>
-        </div>
+            {!currentUser &&(
+                <div className="unregistered-box">
+                    <UnregisteredBox/>
+                </div>
+            )}
+        </>
+
     )
 }

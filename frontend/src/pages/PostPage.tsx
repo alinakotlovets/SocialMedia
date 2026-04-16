@@ -8,7 +8,7 @@ import {PostItem} from "../components/PostItem.tsx";
 import {useCurrentUser} from "../utils/useCurrentUser.ts";
 import {WhatsNewBox} from "../components/WhatsNewBox.tsx";
 import "./HomePage.css";
-import "./PostPage.css";
+import {ParentPost} from "./ParentPost.tsx";
 
 export function PostPage(){
     const { postId } = useParams();
@@ -61,74 +61,76 @@ export function PostPage(){
 
 
     return(
-        <div className="content-box">
-            <div className="home-page-box">
-                <div className="post-box">
-                    {loading.post &&(<h3>Loading...</h3>)}
+        <div className="post-box">
+            {loading.post &&(<h3>Loading...</h3>)}
 
-                    {errors.length > 0 && (
-                        <ul className="add-edit-errors">
-                            {errors.map((e, i) => (
-                                <li className="text-s" key={i}>{e}</li>
-                            ))}
-                        </ul>
-                    )}
+            {errors.length > 0 && (
+                <ul className="add-edit-errors">
+                    {errors.map((e, i) => (
+                        <li className="text-s" key={i}>{e}</li>
+                    ))}
+                </ul>
+            )}
 
-                    {isAddEdit && (
-                        <Modal onClose={()=>{setIsAddEdit(false); setEditingPost(null)}} closeOnOverlayClick={true}>
-                            <AddEditPostForm mode={editingPost ? "edit" : "reply"}
-                                             post={post}
-                                             currentUser={currentUser}
-                                             onSuccess={(updatedPost) => {
-                                                 editingPost? setPost(updatedPost) : setReplies([...replies, updatedPost])
-                                             }}
-                                             setIsAddEditPost={setIsAddEdit}/>
+            {isAddEdit && (
+                <Modal onClose={()=>{setIsAddEdit(false); setEditingPost(null)}} closeOnOverlayClick={true}>
+                    <AddEditPostForm mode={editingPost ? "edit" : "reply"}
+                                     post={post}
+                                     currentUser={currentUser}
+                                     onSuccess={(updatedPost) => {
+                                         editingPost? setPost(updatedPost) : setReplies([...replies, updatedPost])
+                                     }}
+                                     setIsAddEditPost={setIsAddEdit}/>
                         </Modal>
                     )}
 
-                    {parentPost && (
-                        <PostItem
-                            currentUser={currentUser}
-                            post={parentPost}
-                            onEdit={(p) => { setEditingPost(p); setIsAddEdit(true); }}
-                            onDelete={() => navigate("/")}
-                            hasThread={true}
-                        />
-                    )}
-                    {post && (
-                        <PostItem currentUser={currentUser}
-                                  post={post}
-                                  onEdit={()=>{
-                                      setEditingPost(post);
-                                      setIsAddEdit(true)
-                                  }}
-                                  onDelete={()=>navigate("/")}/>
-                    )}
+            {parentPost && post && (
+                <>
+                    <ParentPost parentPost={parentPost} post={post} currentUser={currentUser}
+                                onEditParent={(p:Post) => { setEditingPost(p); setIsAddEdit(true); }}
+                                onDeleteParent={() => navigate("/")}
+                                onEdit={()=>{
+                                    setEditingPost(post);
+                                    setIsAddEdit(true)
+                                }}
+                                onDelete={()=>navigate("/")}/>
+                        </>
+            )}
+
+            {!parentPost && post && (
+                <PostItem currentUser={currentUser}
+                          post={post}
+                          onEdit={()=>{
+                              setEditingPost(post);
+                              setIsAddEdit(true)
+                          }}
+                          onDelete={()=>navigate("/")}/>
+            )}
 
                     { post &&  currentUser &&(
                         <WhatsNewBox currentUser={currentUser} text={"Reply..."} onClick={()=>{setIsAddEdit(true); setEditingPost(null)}}/>
                     )}
 
-                    <div className="replies-box">
-                        {loading.replies && (<h3>Loading...</h3>)}
-                        {loading.replies === false && replies.length === 0 &&(
-                            <div className="empty-replies">
-                                <h4>There no comment yet</h4>
-                            </div>
-                        )}
-                        {loading.replies === false && replies.length>0 && replies.map((r)=>(
-                            <PostItem currentUser={currentUser}
-                                      post={r}
-                                      onEdit={()=>{
-                                          setEditingPost(r);
-                                          setIsAddEdit(true)
-                                      }}
-                                      onClick={() => navigate(`/post/${r.id}`)}
-                                      onDelete={()=> setReplies(replies.filter((repl)=> repl.id !== r.id))}/>
-                        ))}
-                    </div>
+            {loading.replies && (
+                <div className="no-posts">
+                    <h3>Loading...</h3>
                 </div>
-            </div>
+            )}
+            {loading.replies === false && replies.length === 0 &&(
+                <div className="no-posts">
+                    <h4>There no comment yet</h4>
+                </div>
+            )}
+            {loading.replies === false && replies.length>0 && replies.map((r)=>(
+                <PostItem currentUser={currentUser}
+                          post={r}
+                          onEdit={()=>{
+                              setEditingPost(r);
+                              setIsAddEdit(true)
+                          }}
+                          onClick={() => navigate(`/post/${r.id}`)}
+                          onDelete={()=> setReplies(replies.filter((repl)=> repl.id !== r.id))}/>
+            ))}
         </div>
     )
 }

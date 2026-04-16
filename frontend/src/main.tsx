@@ -6,7 +6,8 @@ import "./index.css";
 
 const router = createBrowserRouter(routes);
 
-document.documentElement.setAttribute("data-theme", "dark");
+const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+document.documentElement.setAttribute("data-theme", prefersDark ? "dark" : "light");
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>

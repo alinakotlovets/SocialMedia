@@ -1,22 +1,11 @@
-.content-box {
-    min-height: 100vh;
-    width: 100%;
-}
-
-.home-page-box{
-    display: flex;
-    align-items: start;
-    justify-content: center;
-    gap: 30px;
-    padding: 30px 40px;
-    width: 100%;
-}
-
-
 .post-box{
+    display: flex;
+    flex-direction: column;
     flex: 1;
     max-width: 650px;
     width: 100%;
+    min-height: calc(100vh - 70px);
+    height: 100%;
     border: 1px solid var(--border);
     border-radius: 16px;
 }

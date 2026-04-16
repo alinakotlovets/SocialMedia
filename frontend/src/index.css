@@ -11,7 +11,10 @@
   --code-bg: #f4f3ec;
   --button-bg: #0D0D0D;
   --button-text: #ffffff;
-  --button-bg-active: #525252;
+  --primery-button-bg-active: #494949;
+  --outline-button-bg-active: #F2F2F2;
+  --filter-black-img: invert(50%);
+  --button-bg-active-underline: rgb(0,0,0);
 
   --button-outline-hover: #F2F0EF;
   --shadow:
@@ -43,8 +46,12 @@
   --border: #2e303a;
   --code-bg: #252525;
   --button-bg: #f3f4f6;
+  --filter-black-img: invert(60%);
   --button-text: #000;
-  --button-bg-active: #C4C4C4;
+  --primery-button-bg-active: #C4C4C4;
+  --outline-button-bg-active: #525252;
+  --button-bg-active-underline: #fff;
+
 
   --button-outline-hover: #1a1a1a;
   --shadow:
@@ -165,7 +172,35 @@ textarea {
   color: var(--text-h);
 }
 
+.button-outline:focus,
+.button-outline:hover{
+  background-color: var(--outline-button-bg-active);
+}
+
 .button-primary:focus,
 .button-primary:hover{
-  background-color: var(--button-bg-active);
+  background-color: var(--primery-button-bg-active);
+}
+
+.content-box {
+  min-height: 100vh;
+  width: 100%;
+}
+
+.page-box{
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  gap: 30px;
+  padding: 30px 40px;
+  width: 100%;
+  min-height: calc(100vh - 40px);
+  height: 100%;
+}
+
+.no-posts{
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

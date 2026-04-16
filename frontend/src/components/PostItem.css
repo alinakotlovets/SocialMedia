@@ -6,6 +6,7 @@
     justify-content: start;
     border-bottom: 1px solid var(--border);
     padding: 16px 20px;
+    cursor: pointer;
 }
 
 .post-list-item.has-thread {
@@ -55,7 +56,7 @@
 
 .more-btn img{
     width: 20px;
-    filter: invert(60%);
+    filter: var(--filter-black-img);
 }
 
 .post-item-content {
@@ -98,7 +99,7 @@
 
 
 .unlike-post-img{
-    filter: invert(60%);
+    filter: var(--filter-black-img);
 }
 
 .post-item-action-box{

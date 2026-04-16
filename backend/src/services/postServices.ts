@@ -1,7 +1,7 @@
 import {prisma} from "../../lib/prisma";
 import type {Post} from "../../generated/prisma/client";
 import type {PublicUser} from "../types/PublicUser";
-type PostWithUser = Post & {user: PublicUser};
+export type PostWithUser = Post & {user: PublicUser};
 export const postServices = {
     createPost: async(text:string, userId:number, postId: number | null):Promise<PostWithUser>=>
         prisma.post.create({
@@ -69,6 +69,7 @@ export const postServices = {
     getPostsByUserId: async(userId:number, cursorId:number|null):Promise<PostWithUser[]>=>
         prisma.post.findMany({
             where:{
+                parentId: null,
                 userId,
                 ...(cursorId ? {id: {lt: cursorId}} :{})
             },
@@ -109,5 +110,6 @@ export const postServices = {
                 id: "asc"
             },
             take: 50
-        })
+        }),
+
 }

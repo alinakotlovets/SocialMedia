@@ -1,0 +1,66 @@
+.user-page-header-box{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    text-align: start;
+}
+
+.user-page-header-box img{
+    width: 100px;
+    height: 100px;
+    border-radius: 100px;
+    object-fit: cover;
+}
+
+.header-top-box{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.header-top-box-info{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: start;
+    width: 100%;
+}
+
+.header-top-box-text{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+}
+
+
+.user-page-posts-btn-box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid var(--border);
+    width: 100%;
+}
+
+
+.user-page-posts-btn-box button{
+    background: transparent;
+    flex: 1;
+    padding: 16px 20px;
+    height: 100%;
+    border: none;
+    transition: background 200ms ease-in-out;
+}
+
+
+.user-page-posts-btn-box button:hover{
+    background: var(--outline-button-bg-active);
+}
+
+
+.active{
+    border-bottom: 1px solid var(--button-bg-active-underline) !important;
+}

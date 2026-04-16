@@ -4,6 +4,7 @@ import {getUserId} from "../utils/getUserId";
 import {parseId} from "../utils/parseId";
 import {AppError} from "../utils/AppError";
 import {parseOptionalId} from "../utils/parseOptionalId";
+import {userServices} from "../services/userServices";
 
 export async function addPost(req:Request, res:Response){
     const userId = getUserId(req);
@@ -50,7 +51,9 @@ export async function getPosts(req:Request, res:Response){
 
 export async function getUserPost(req:Request, res:Response){
     const cursorId = req.query.cursorId ? Number(req.query.cursorId) : null;
-    const userId = getUserId(req);
+    const userId = parseId(req.params.userId, "User id ");
+    const user = await userServices.getUserById(userId);
+    if(!user) throw new AppError(404, "User with this id not found");
     const posts = await postServices.getPostsByUserId(userId, cursorId);
     res.status(200).json({posts});
 }

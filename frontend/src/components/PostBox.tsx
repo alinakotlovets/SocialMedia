@@ -7,16 +7,18 @@ import {WhatsNewBox} from "./WhatsNewBox.tsx";
 import "./PostBox.css"
 import type {Post} from "../types/Post.ts";
 import Client from "../api/client.ts";
+import {usePosts} from "../context/PostsContext.tsx";
 
 type PostBoxProps = {
     currentUser: User | null
 }
 export function PostBox({currentUser}:PostBoxProps){
-    const [posts, setPosts] = useState<Post[]>([])
     const [isAddEditPost, setIsAddEditPost] =useState(false);
     const [editingPost, setEditingPost] = useState<Post | null>(null);
     const [errors, setErrors] = useState<string[]>([]);
 
+
+    const {posts, setPosts} = usePosts();
     async function getPosts(cursorId: number | null) {
         const posts = await Client(`/posts?cursorId=${cursorId}`,"GET");
         if(posts.errors) setErrors(posts.errors);

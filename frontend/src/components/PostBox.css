@@ -18,6 +18,7 @@
     height: 40px;
     object-fit: cover;
     border-radius: 100px;
+    cursor: pointer;
 }
 
 .post-list{

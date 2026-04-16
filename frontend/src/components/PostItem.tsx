@@ -12,6 +12,7 @@ import repliesImg from "../assets/replies.png"
 import {Modal} from "./ui/Modal.tsx";
 import {UnregisteredBox} from "./UnregisteredBox.tsx";
 import {useNavigate} from "react-router-dom";
+import * as React from "react";
 
 type PostItemProps = {
     currentUser: User | null,
@@ -73,8 +74,13 @@ export function PostItem({currentUser, post, onEdit, onDelete, onClick, hasThrea
 
     const navigate = useNavigate();
 
+    function handleUserClick(e:React.MouseEvent<HTMLElement>){
+        e.stopPropagation();
+        navigate(`/user/${post.userId}`);
+    }
+
     return(
-       <li className={`post-list-item ${hasThread ? "has-thread" : ""}`}
+       <li key={post.id} className={`post-list-item ${hasThread ? "has-thread" : ""}`}
            onClick={()=> onClick ? onClick() : navigate(`/post/${post.id}`)}>
            {showLoginForm && (
                <Modal onClose={()=>setShowLoginForm(false)} closeOnOverlayClick={true}>
@@ -90,13 +96,17 @@ export function PostItem({currentUser, post, onEdit, onDelete, onClick, hasThrea
            )}
            <div className="post-item-img-wrapper">
            <img  className="post-item-img" src={post.user.avatar || defaultAvatar}
-                alt={post.user.username + " avatar"}/>
+                 alt={post.user.username + " avatar"}
+                 onClick={handleUserClick}/>
            </div>
            <div className="post-item-content">
                <div className="post-item-top-box">
                    <div className="post-item-header">
-                       <h4>{post.user.displayName}</h4>
-                       <p className="text-s text-grey">@{post.user.username}</p>
+                       <h4 onClick={handleUserClick}>
+                           {post.user.displayName}</h4>
+                       <p onClick={handleUserClick}
+                          className="text-s text-grey">
+                           @{post.user.username}</p>
                        <p className="text-s text-grey">{formatDate(post.createdAt) !== formatDate(post.editedAt) ?
                            `edited ${formatDate(post.editedAt)} ago` : formatDate(post.createdAt)}</p>
                    </div>

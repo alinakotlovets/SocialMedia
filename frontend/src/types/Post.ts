@@ -6,6 +6,7 @@ export type Post ={
     createdAt: string,
     editedAt: string,
     userId: number,
+    parent: Post | null,
     "parentId": number | null,
     "_count": {
         "likes": number,

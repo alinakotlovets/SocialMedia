@@ -10,7 +10,7 @@ import liked from "../assets/liked.png"
 import unliked from  "../assets/unliked.png"
 import repliesImg from "../assets/replies.png"
 import {Modal} from "./ui/Modal.tsx";
-import {UnregisteredBox} from "./UnregisteredBox.tsx";
+import {UnregisteredBox} from "./ui/UnregisteredBox.tsx";
 import {useNavigate} from "react-router-dom";
 import * as React from "react";
 
@@ -140,12 +140,13 @@ export function PostItem({currentUser, post, onEdit, onDelete, onClick, hasThrea
                        e.stopPropagation()
                        handleLike()}}>
                    <img className={like ? "liked-post-img" : "unlike-post-img"}
-                        src={like ? liked : unliked} width={15} />
+                        src={like ? liked : unliked} width={15}
+                        alt={+ like ? "grey like button icon. Post not liked" : "red like button. Post liked"}/>
                    <p className="text-grey text-s">{likeCount}</p>
                    </button>
                    <button className="like-btn button">
                        <img className="unlike-post-img"
-                            src={repliesImg} width={15} />
+                            src={repliesImg} width={15} alt="relpies button icon"/>
                        <p className="text-grey text-s">{post._count.replies}</p>
                    </button>
                </div>

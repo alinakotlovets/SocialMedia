@@ -6,6 +6,7 @@ import cors from "cors";
 import postRouter from "./routes/postRouter";
 import userRouter from "./routes/userRouter";
 import likeRouter from "./routes/likeRouter";
+import followRouter from "./routes/followRouter";
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(express.urlencoded({extended: true}));
 const port = 3000;
 
 app.use("/posts", postRouter);
+app.use("/follow", followRouter);
 app.use("/like", likeRouter);
 app.use("/user", userRouter);
 app.use("/auth", authRouter);

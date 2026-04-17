@@ -3,4 +3,7 @@ export type PublicUser = {
     displayName: string;
     username: string;
     avatar: string | null;
+    description: string | null
+    _count: { followers: number, following: number }
+    followers: { id: number }[]
 }

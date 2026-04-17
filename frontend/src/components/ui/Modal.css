@@ -53,7 +53,7 @@
     position: absolute;
     top: 10px;
     right: 7px;
-    color: rgba(255, 255, 255, 1);
+    color: var(--button-bg-active-underline);
     background-color: transparent;
     border: none;
     cursor: pointer;

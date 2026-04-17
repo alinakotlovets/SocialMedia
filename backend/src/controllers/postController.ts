@@ -52,7 +52,7 @@ export async function getPosts(req:Request, res:Response){
 export async function getUserPost(req:Request, res:Response){
     const cursorId = req.query.cursorId ? Number(req.query.cursorId) : null;
     const userId = parseId(req.params.userId, "User id ");
-    const user = await userServices.getUserById(userId);
+    const user = await userServices.getUserById(userId, null);
     if(!user) throw new AppError(404, "User with this id not found");
     const posts = await postServices.getPostsByUserId(userId, cursorId);
     res.status(200).json({posts});

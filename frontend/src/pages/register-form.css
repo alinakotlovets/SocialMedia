@@ -31,7 +31,7 @@
 
 .register-form input,
 .register-form textarea {
-    width: calc(100% - 24px);
+    width: 100%;
 }
 
 .register-form input:-webkit-autofill,

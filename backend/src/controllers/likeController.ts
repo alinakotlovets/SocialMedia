@@ -9,7 +9,7 @@ export async function likeUnlikePost(req:Request, res:Response){
     const userId = getUserId(req);
 
     const postId = parseId(req.params.postId, "Post id");
-    const post = await postServices.getPostById(postId);
+    const post = await postServices.getPostById(postId, userId);
     if(!post) throw new AppError(404, "post with this id not found");
 
     const result = await likeServices.likeUnlikePost(userId, postId);

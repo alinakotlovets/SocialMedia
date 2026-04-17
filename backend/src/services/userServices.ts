@@ -1,12 +1,18 @@
 import {prisma} from "../../lib/prisma";
 import type {PublicUser} from "../types/PublicUser";
-import type {PostWithUser} from "./postServices";
+import type {PostWithUser} from "../types/Post";
 
 export const userServices = {
-    getUserById: async(id: number):Promise<PublicUser | null> =>
+    getUserById: async(id: number, currentUserId: number | null):Promise<PublicUser | null> =>
         prisma.user.findUnique({
             where:{id},
-            select:{id:true, displayName:true, username:true, avatar:true, description:true}
+            select:{id:true, displayName:true, username:true, avatar:true, description:true,
+                _count: { select: { following: true, followers: true }},
+                followers: currentUserId ? {
+                    where: { followerId: currentUserId },
+                    select: { id: true }
+                } : false
+            },
         }),
     getLikedPostsByUserId: async (userId: number, cursorId: number | null, currentUserId: number | null): Promise<PostWithUser[]> =>
         prisma.like.findMany({
@@ -58,5 +64,18 @@ export const userServices = {
                 },
             orderBy: { id: "desc" },
             take: 50
+        }),
+    editUser: async(userId:number, displayName:string, description:string,
+                    avatar:string | null, currentUserId:number | null):Promise<PublicUser> =>
+        prisma.user.update({
+            where:{id:userId},
+            data:{displayName, description,avatar},
+            select:{id:true, displayName:true, username:true, avatar:true, description:true,
+                _count: { select: { following: true, followers: true }},
+                followers: currentUserId ? {
+                    where: { followerId: currentUserId },
+                    select: { id: true }
+                } : false
+            },
         })
 }

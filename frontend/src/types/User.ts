@@ -3,5 +3,14 @@ export type User={
     "displayName": string,
     "username": string,
     "avatar": string | null,
-    "description": string | null
+    "description": string | null,
+    "_count": {
+        "following": number,
+        "followers": number
+    },
+    followers: [
+        {
+            "id": number
+        }
+    ]
 }

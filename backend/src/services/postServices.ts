@@ -1,7 +1,5 @@
 import {prisma} from "../../lib/prisma";
-import type {Post} from "../../generated/prisma/client";
-import type {PublicUser} from "../types/PublicUser";
-export type PostWithUser = Post & {user: PublicUser};
+import type {PostWithUser} from "../types/Post";
 export const postServices = {
     createPost: async(text:string, userId:number, postId: number | null):Promise<PostWithUser>=>
         prisma.post.create({

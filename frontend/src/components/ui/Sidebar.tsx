@@ -1,15 +1,16 @@
-import addIcon from "../assets/add.png";
-import homeIcon from "../assets/home.png"
-import logoutIcon from "../assets/logout.png"
-import themeIcon from "../assets/theme.png"
-import profileIcon from "../assets/user.png"
+import addIcon from "../../assets/add.png";
+import homeIcon from "../../assets/home.png"
+import logoutIcon from "../../assets/logout.png"
+import themeIcon from "../../assets/theme.png"
+import profileIcon from "../../assets/user.png"
 import "./Sidebar.css"
-import {useCurrentUser} from "../utils/useCurrentUser.ts";
+import {useCurrentUser} from "../../utils/useCurrentUser.ts";
 import {useNavigate} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
-import {usePosts} from "../context/PostsContext.tsx";
-import {AddEditPostForm} from "./AddEditPostForm.tsx";
-import {Modal} from "./ui/Modal.tsx";
+import {usePosts} from "../../context/PostsContext.tsx";
+import {AddEditPostForm} from "../AddEditPostForm.tsx";
+import {Modal} from "./Modal.tsx";
+import {useUserPosts} from "../../context/UsersPostsContext.tsx";
 
 export function Sidebar(){
 
@@ -20,6 +21,7 @@ export function Sidebar(){
 
     const currentUser = useCurrentUser();
     const {addPost} = usePosts();
+    const {addUsersPosts} = useUserPosts();
 
     function handleLogOut(){
         localStorage.removeItem("token");
@@ -49,6 +51,7 @@ export function Sidebar(){
                                      currentUser={currentUser}
                                      onSuccess={(post) => {
                                          addPost(post);
+                                         addUsersPosts(post);
                                          setIsAddPost(false);
                                      }}
                                      setIsAddEditPost={setIsAddPost}/>

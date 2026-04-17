@@ -8,7 +8,7 @@ import {PostItem} from "../components/PostItem.tsx";
 import {useCurrentUser} from "../utils/useCurrentUser.ts";
 import {WhatsNewBox} from "../components/WhatsNewBox.tsx";
 import "./HomePage.css";
-import {ParentPost} from "./ParentPost.tsx";
+import {ParentPost} from "../components/ParentPost.tsx";
 
 export function PostPage(){
     const { postId } = useParams();

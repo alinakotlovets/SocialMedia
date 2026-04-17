@@ -8,16 +8,18 @@ datasource db {
 }
 
 model User {
-  id          Int     @id @default(autoincrement())
-  username    String  @unique
+  id          Int      @id @default(autoincrement())
+  username    String   @unique
   displayName String
-  email       String  @unique
-  isVerified  Boolean @default(false)
+  email       String   @unique
+  isVerified  Boolean  @default(false)
   description String?
   password    String?
   avatar      String?
   posts       Post[]
   likes       Like[]
+  following   Follow[] @relation("UserFollowing")
+  followers   Follow[] @relation("UserFollowers")
 }
 
 model Post {
@@ -41,4 +43,15 @@ model Like {
   user   User @relation(fields: [userId], references: [id])
 
   @@unique([postId, userId])
+}
+
+model Follow {
+  id          Int      @id @default(autoincrement())
+  followerId  Int
+  followingId Int
+  follower    User     @relation("UserFollowing", fields: [followerId], references: [id])
+  following   User     @relation("UserFollowers", fields: [followingId], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@unique([followerId, followingId])
 }

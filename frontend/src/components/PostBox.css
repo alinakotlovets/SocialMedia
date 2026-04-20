@@ -27,3 +27,18 @@
     align-items: start;
     justify-content: start;
 }
+
+.feed-btn-box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    border-bottom: 1px solid var(--border);
+}
+
+.feed-btn-box button{
+    background: transparent;
+    border: none;
+    padding: 16px 20px;
+    width: 100%;
+}

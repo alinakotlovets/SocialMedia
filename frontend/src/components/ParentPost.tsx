@@ -4,16 +4,17 @@ import type {User} from "../types/User.ts";
 
 
 type ParentPostProps={
-    parentPost: Post |null,
+    parentPost: Post,
     post: Post | null,
     currentUser: User|null,
     onEditParent: (value:Post)=>void,
     onDeleteParent: (id: number)=>void,
     onEdit: (post: Post) => void,
     onDelete: (id: number) => void,
+    repliesCount?: number
 }
 export function ParentPost({parentPost, post, currentUser, onEditParent, onDeleteParent,
-                               onEdit, onDelete}:ParentPostProps){
+                               onEdit, onDelete, repliesCount}:ParentPostProps){
     return(<>
         {parentPost && (
             <PostItem
@@ -21,6 +22,7 @@ export function ParentPost({parentPost, post, currentUser, onEditParent, onDelet
                 post={parentPost}
                 onEdit={onEditParent}
                 onDelete={onDeleteParent}
+                repliesCount={parentPost._count.replies}
                 hasThread={true}
             />
         )}
@@ -28,6 +30,7 @@ export function ParentPost({parentPost, post, currentUser, onEditParent, onDelet
             <PostItem currentUser={currentUser}
                       post={post}
                       onEdit={onEdit}
+                      repliesCount={repliesCount}
                       onDelete={onDelete}/>
         )}
     </>)

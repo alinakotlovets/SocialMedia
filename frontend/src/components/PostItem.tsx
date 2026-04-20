@@ -20,10 +20,12 @@ type PostItemProps = {
     onEdit: (post: Post) => void
     onDelete: (id:number)=>void,
     onClick?: () => void,
-    hasThread?: boolean
+    hasThread?: boolean,
+    repliesCount?:number
 }
 
-export function PostItem({currentUser, post, onEdit, onDelete, onClick, hasThread}:PostItemProps){
+export function PostItem({currentUser, post, onEdit, onDelete, onClick,
+                             hasThread, repliesCount}:PostItemProps){
 
     const menuRef = useRef<HTMLDivElement>(null);
     const [errors, setErrors] = useState<string[]>([]);
@@ -147,7 +149,7 @@ export function PostItem({currentUser, post, onEdit, onDelete, onClick, hasThrea
                    <button className="like-btn button">
                        <img className="unlike-post-img"
                             src={repliesImg} width={15} alt="relpies button icon"/>
-                       <p className="text-grey text-s">{post._count.replies}</p>
+                       <p className="text-grey text-s">{repliesCount}</p>
                    </button>
                </div>
            </div>

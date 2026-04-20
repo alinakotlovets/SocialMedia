@@ -109,5 +109,53 @@ export const postServices = {
             },
             take: 50
         }),
-
+    getFollowingPosts: async(userId:number, cursorId:number|null):Promise<PostWithUser[]> =>
+    prisma.post.findMany({
+        where: {
+            parentId: null,
+            user: {
+                followers: {
+                    some: {
+                        followerId: userId
+                    }
+                }
+            },
+            ...(cursorId ? { id: { lt: cursorId } } : {})
+            },
+        include: {
+            user:
+                {select:
+                        {id:true, username: true, displayName:true, avatar:true}
+                },
+            likes:userId ? {
+                where: { userId },
+                select: { id: true }
+            } : false,
+            _count: { select: { replies: true, likes: true } }
+        },
+        orderBy: { id: "desc" },
+        take: 50
+        }),
+    findPosts: async(search: string, userId: number, cursorId:number|null):Promise<PostWithUser[]>=>
+        prisma.post.findMany({
+            where:{
+                text: {
+                    contains: search,
+                    mode:"insensitive"
+                }
+            },
+            include: {
+                user:
+                    {select:
+                            {id:true, username: true, displayName:true, avatar:true}
+                    },
+                likes:userId ? {
+                    where: { userId },
+                    select: { id: true }
+                } : false,
+                _count: { select: { replies: true, likes: true } }
+            },
+            orderBy: { id: "desc" },
+            take: 50
+        })
 }

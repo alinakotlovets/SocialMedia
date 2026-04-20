@@ -45,13 +45,20 @@ export async function editUser(req:Request, res:Response){
     const userId = parseId(req.params.userId, "User id");
     const currentUserId = getUserId(req);
     if(userId !== currentUserId) throw  new AppError(403, "You dont have permission to edit this user");
-
     const user = await userServices.getUserById(userId, null);
     if(!user) throw new AppError(404, "User with this id not found");
-
     let avatar= await uploadImage(req.file, "messenger-users");
     if( avatar === null && user.avatar !== null) avatar = user.avatar;
-
     const updatedUser = await userServices.editUser(userId, displayName,description,avatar,currentUserId);
     res.status(200).json({user: updatedUser})
+}
+
+export async function findUsers(req:Request, res:Response){
+    const search = req.query.search;
+    if(!search) throw new AppError(400, "Search text is required");
+    if(typeof search !== "string") throw new AppError(400, "Search format is invalid");
+    const currentUserId = getUserId(req);
+    const cursorId = parseOptionalId(req.params.cursorId, "Cursor id ");
+    const users = await userServices.findUsers(search, currentUserId, cursorId);
+    res.status(200).json({users});
 }

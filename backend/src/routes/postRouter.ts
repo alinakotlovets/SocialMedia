@@ -10,12 +10,14 @@ import {
     getPosts,
     getUserPost,
     getPostReplies,
-    getPostById
+    getPostById, getFollowingPosts, getSearchPosts
 } from "../controllers/postController";
 
 const postRouter = express.Router();
 
 
+postRouter.get("/following", verifyToken, getFollowingPosts);
+postRouter.get("/search", verifyToken, getSearchPosts);
 postRouter.delete("/:postId", verifyToken, deletePost);
 postRouter.put("/:postId", verifyToken, postValidation, validateFields, editPost);
 postRouter.post("/:postId/replies",verifyToken, postValidation, validateFields, addPost);

@@ -21,6 +21,7 @@ export function PostList({ posts, currentUser, navigate, isReply, onEdit, onDele
                     currentUser={currentUser}
                     post={post}
                     onEdit={onEdit}
+                    repliesCount={post._count.replies}
                     onClick={() => navigate(`/post/${post.id}`)}
                     onDelete={(id) => onDelete(id)}
                 />

@@ -75,3 +75,20 @@ export async function getPostById(req:Request, res:Response){
     if(!post) throw new AppError(404, "Post not found");
     res.status(200).json({post});
 }
+
+export async function getFollowingPosts(req:Request, res:Response){
+    const userId = getUserId(req);
+    const cursorId = parseOptionalId(req.query.cursorId, "Cursor id ");
+    const posts = await postServices.getFollowingPosts(userId, cursorId);
+    res.status(200).json({posts});
+}
+
+export async function getSearchPosts(req:Request, res:Response){
+    const search = req.query.search;
+    if(typeof search !== "string") throw new AppError(400, "Search text is invalid");
+    if(!search) throw new AppError(400, "Search text is required");
+    const userId = getUserId(req);
+    const cursorId = parseOptionalId(req.query.cursorId, "Cursor id ");
+    const posts =  await  postServices.findPosts(search, userId, cursorId);
+    res.status(200).json({posts});
+}

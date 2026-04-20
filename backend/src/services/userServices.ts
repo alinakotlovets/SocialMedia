@@ -77,5 +77,23 @@ export const userServices = {
                     select: { id: true }
                 } : false
             },
+        }),
+    findUsers: async(search:string, currentUserId: number | null, cursorId:number|null):Promise<PublicUser[]> =>
+        prisma.user.findMany({
+            where:{
+                OR: [
+                    { username: { contains: search, mode: 'insensitive' } },
+                    { displayName: { contains: search, mode: 'insensitive' } }
+                ]
+            },
+            select:{id:true, displayName:true, username:true, avatar:true, description:true,
+                _count: { select: { following: true, followers: true }},
+                followers: currentUserId ? {
+                    where: { followerId: currentUserId },
+                    select: { id: true }
+                } : false
+            },
+            orderBy: { id: "desc" },
+            take: 10
         })
 }

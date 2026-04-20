@@ -15,23 +15,44 @@ type PostBoxProps = {
 export function PostBox({currentUser}:PostBoxProps){
     const [isAddEditPost, setIsAddEditPost] =useState(false);
     const [editingPost, setEditingPost] = useState<Post | null>(null);
-    const [errors, setErrors] = useState<string[]>([]);
-
+    const [errors, setErrors] = useState<{posts: string[], following:string[]}>({posts:[], following:[]});
+    const [following, setFollowing] = useState<Post[]>([]);
+    const [feedType, setFeedType] = useState<"posts" | "following">("posts")
 
     const {posts, setPosts} = usePosts();
     async function getPosts(cursorId: number | null) {
-        const posts = await Client(`/posts?cursorId=${cursorId}`,"GET");
-        if(posts.errors) setErrors(posts.errors);
+        const url = cursorId ? `/posts?cursorId=${cursorId}` : "/posts";
+        const posts = await Client(url,"GET");
+        if(posts.errors) setErrors((prev)=>({...prev, posts:posts.errors}));
         if(posts.posts) setPosts(posts.posts);
+    }
+
+    async function getFollowingPosts(cursorId: number |null){
+        const url = cursorId ? `/posts/following?cursorId=${cursorId}` : `/posts/following`;
+        const response = await Client(url, "GET");
+        if (response.errors) setErrors((prev)=>({...prev, followingPosts:response.errors}));
+        if (response.posts) setFollowing(response.posts);
     }
 
     useEffect(() => {
         getPosts(null);
+        getFollowingPosts(null);
     }, []);
 
+    const activePosts = feedType === "posts" ? posts : following;
+    const setActivePosts = feedType === "posts" ? setPosts : setFollowing;
 
     return(
-        <div className="post-box">
+        <div  className="post-box">
+            {currentUser &&(
+                <div className="feed-btn-box">
+                    <button className={feedType === "posts" ? "active" : ""}
+                        onClick={()=>setFeedType("posts")}>For you</button>
+                    <button className={feedType === "following" ? "active" : ""}
+                        onClick={()=>setFeedType("following")}>Following</button>
+                </div>
+            )}
+            <div >
             {isAddEditPost && (
                 <Modal onClose={()=>{setIsAddEditPost(false);
                     setEditingPost(null);}} closeOnOverlayClick={true}>
@@ -40,9 +61,9 @@ export function PostBox({currentUser}:PostBoxProps){
                                      currentUser={currentUser}
                                      onSuccess={(newPost) => {
                                          if (editingPost) {
-                                             setPosts(posts.map(p => p.id === newPost.id ? newPost : p));
+                                             setActivePosts(posts.map(p => p.id === newPost.id ? newPost : p));
                                          } else {
-                                             setPosts([newPost, ...posts]);
+                                             setActivePosts([newPost, ...posts]);
                                          }
                                          setEditingPost(null);
                                      }}
@@ -56,28 +77,30 @@ export function PostBox({currentUser}:PostBoxProps){
             )}
 
             <div>
-                {errors.length>0 &&(
+                {errors[feedType].length>0 &&(
                     <ul>
-                        {errors.map((e, i)=>
+                        {errors[feedType].map((e, i)=>
                             <li key={i}>{e}</li>
                         )}
                     </ul>
                 )}
-                {posts.length>0 &&(
+                {activePosts.length>0 &&(
                     <ul className="post-list">
-                        {posts.map((post)=>
+                        {activePosts.map((post)=>
                            <PostItem currentUser={currentUser}
                                      post={post}
+                                     repliesCount={post._count.replies}
                                      onEdit={(post) => {
                                          setEditingPost(post);
                                          setIsAddEditPost(true);
                                      }}
-                                     onDelete={(id) => setPosts(posts.filter(p => p.id !== id))}
+                                     onDelete={(id) => setActivePosts(posts.filter(p => p.id !== id))}
                            />
                         )}
                     </ul>
                 )}
             </div>
+        </div>
         </div>
     )
 }

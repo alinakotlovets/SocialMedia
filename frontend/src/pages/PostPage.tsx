@@ -20,6 +20,7 @@ export function PostPage(){
     const [editingPost, setEditingPost] = useState<Post | null>(null);
     const [replies, setReplies] = useState<Post[]>([]);
     const [parentPost, setParentPost] = useState<Post | null>(null);
+    const [repliesCount, setRepliesCount] = useState<number>(0);
 
     const currentUser = useCurrentUser();
     const navigate = useNavigate();
@@ -32,6 +33,7 @@ export function PostPage(){
             if(response.errors) setErrors(response.errors);
             if(response.post) {
                 setPost(response.post);
+                setRepliesCount(response.post._count.replies);
                 if (response.post.parentId) {
                     const parentRes = await Client(`/posts/${response.post.parentId}`, "GET");
                     if (parentRes.post) setParentPost(parentRes.post);
@@ -78,7 +80,14 @@ export function PostPage(){
                                      post={post}
                                      currentUser={currentUser}
                                      onSuccess={(updatedPost) => {
-                                         editingPost? setPost(updatedPost) : setReplies([...replies, updatedPost])
+                                         {
+                                             if (editingPost) {
+                                                 setPost(updatedPost);
+                                             } else {
+                                                 setReplies([...replies, updatedPost]);
+                                                 setRepliesCount((prev:number)=> prev + 1);
+                                             }
+                                         }
                                      }}
                                      setIsAddEditPost={setIsAddEdit}/>
                         </Modal>
@@ -89,6 +98,7 @@ export function PostPage(){
                     <ParentPost parentPost={parentPost} post={post} currentUser={currentUser}
                                 onEditParent={(p:Post) => { setEditingPost(p); setIsAddEdit(true); }}
                                 onDeleteParent={() => navigate("/")}
+                                repliesCount={repliesCount}
                                 onEdit={()=>{
                                     setEditingPost(post);
                                     setIsAddEdit(true)
@@ -100,6 +110,7 @@ export function PostPage(){
             {!parentPost && post && (
                 <PostItem currentUser={currentUser}
                           post={post}
+                          repliesCount={repliesCount}
                           onEdit={()=>{
                               setEditingPost(post);
                               setIsAddEdit(true)
@@ -128,8 +139,11 @@ export function PostPage(){
                               setEditingPost(r);
                               setIsAddEdit(true)
                           }}
+                          repliesCount={r._count.replies}
                           onClick={() => navigate(`/post/${r.id}`)}
-                          onDelete={()=> setReplies(replies.filter((repl)=> repl.id !== r.id))}/>
+                          onDelete={() => {
+                              setReplies(replies.filter((repl) => repl.id !== r.id));
+                              setRepliesCount((prev:number) => prev - 1)}}/>
             ))}
         </div>
     )

@@ -3,6 +3,7 @@ import homeIcon from "../../assets/home.png"
 import logoutIcon from "../../assets/logout.png"
 import themeIcon from "../../assets/theme.png"
 import profileIcon from "../../assets/user.png"
+import searchIcon from "../../assets/search.png"
 import "./Sidebar.css"
 import {useCurrentUser} from "../../utils/useCurrentUser.ts";
 import {useNavigate} from "react-router-dom";
@@ -95,6 +96,10 @@ export function Sidebar(){
                         </div>)
                     }
                 </div>
+                <button className="sidebar-btn button-md"
+                    onClick={()=>navigate("/search")}>
+                    <img src={searchIcon} alt="serch button icon"/>
+                </button>
                 <button onClick={handleLogOut}
                         className="sidebar-btn button-md">
                     <img src={logoutIcon} alt="logout button icon"/>

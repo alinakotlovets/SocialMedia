@@ -142,7 +142,8 @@ export const postServices = {
                 text: {
                     contains: search,
                     mode:"insensitive"
-                }
+                },
+                ...(cursorId ? { id: { lt: cursorId } } : {})
             },
             include: {
                 user:

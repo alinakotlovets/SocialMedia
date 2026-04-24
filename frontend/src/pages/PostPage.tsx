@@ -5,10 +5,10 @@ import type {Post} from "../types/Post.ts";
 import {Modal} from "../components/ui/Modal.tsx";
 import {AddEditPostForm} from "../components/AddEditPostForm.tsx";
 import {PostItem} from "../components/PostItem.tsx";
-import {useCurrentUser} from "../utils/useCurrentUser.ts";
 import {WhatsNewBox} from "../components/WhatsNewBox.tsx";
 import "./HomePage.css";
 import {ParentPost} from "../components/ParentPost.tsx";
+import {useCurrentUserContext} from "../context/CurrentUserContext.tsx";
 
 export function PostPage(){
     const { postId } = useParams();
@@ -21,8 +21,8 @@ export function PostPage(){
     const [replies, setReplies] = useState<Post[]>([]);
     const [parentPost, setParentPost] = useState<Post | null>(null);
     const [repliesCount, setRepliesCount] = useState<number>(0);
+    const { currentUser} = useCurrentUserContext();
 
-    const currentUser = useCurrentUser();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -109,6 +109,7 @@ export function PostPage(){
 
             {!parentPost && post && (
                 <PostItem currentUser={currentUser}
+                          key={post.id}
                           post={post}
                           repliesCount={repliesCount}
                           onEdit={()=>{
@@ -134,6 +135,7 @@ export function PostPage(){
             )}
             {loading.replies === false && replies.length>0 && replies.map((r)=>(
                 <PostItem currentUser={currentUser}
+                          key={r.id}
                           post={r}
                           onEdit={()=>{
                               setEditingPost(r);

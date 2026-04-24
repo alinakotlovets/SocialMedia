@@ -28,7 +28,7 @@ export function PostList({ posts, currentUser, navigate, isReply, onEdit, onDele
             ))}
 
             {isReply && posts.map(post=>(
-                <ParentPost parentPost={post.parent}
+                <ParentPost parentPost={post.parent!}
                             post={post}
                             currentUser={currentUser}
                             onEditParent={onEdit}

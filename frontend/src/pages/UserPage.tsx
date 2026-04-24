@@ -4,7 +4,7 @@ import type {User} from "../types/User.ts";
 import Client from "../api/client.ts";
 import defaultAvatar from "../assets/defaultAvatar.png"
 import type {Post} from "../types/Post.ts";
-import {useCurrentUser} from "../utils/useCurrentUser.ts";
+import {useCurrentUserContext} from "../context/CurrentUserContext.tsx";
 import "./UserPage.css";
 import {PostList} from "../components/PostList.tsx";
 import {Modal} from "../components/ui/Modal.tsx";
@@ -12,6 +12,7 @@ import {FollowUsersList} from "../components/FollowUsersList.tsx";
 import {EditUserForm} from "../components/EditUserForm.tsx";
 import {AddEditPostForm} from "../components/AddEditPostForm.tsx";
 import {useUserPosts} from "../context/UsersPostsContext.tsx";
+import {UnregisteredBox} from "../components/ui/UnregisteredBox.tsx";
 
 export function UserPage(){
     const {userId} = useParams();
@@ -35,8 +36,9 @@ export function UserPage(){
     const [isEditUser,setIsEditUser] = useState<boolean>(false);
     const [editingPost, setEditingPost] = useState<Post | null>(null);
     const [isAddEditPost, setIsAddEditPost] = useState(false);
+    const [isUnregisterBox, setIsUnregisterBox] = useState<boolean>(false);
 
-    const currentUser = useCurrentUser();
+    const {currentUser} = useCurrentUserContext();
     const navigate = useNavigate();
 
     const {posts, setPosts} = useUserPosts();
@@ -162,6 +164,13 @@ export function UserPage(){
                 </Modal>
             )}
 
+            {isUnregisterBox &&(
+                <Modal onClose={()=>setIsUnregisterBox(false)}
+                       closeOnOverlayClick={true}>
+                    <UnregisteredBox/>
+                </Modal>
+            )}
+
             {isEditUser &&(
                 <Modal onClose={()=>setIsEditUser(false)} closeOnOverlayClick={false}>
                     <EditUserForm user={user} setIsEditUser={setIsEditUser}
@@ -221,14 +230,22 @@ export function UserPage(){
                             {user.description && (<h4 className="text-s">{user.description}</h4>)}
                             <div className="user-page-followers-box">
                                 <p  onClick={()=>{
-                                    getFollowersOrFollowing("followers");
-                                    setIsFollowForm(true);
+                                    if(!currentUser){
+                                        setIsUnregisterBox(true)
+                                    } else {
+                                        getFollowersOrFollowing("followers");
+                                        setIsFollowForm(true);
+                                    }
                                 }}
                                     className="text-s text-grey"
                                     style={{cursor:"pointer"}}>{followersNum} followers</p>
                                 <p  onClick={()=>{
-                                    getFollowersOrFollowing("following");
-                                    setIsFollowForm(true);
+                                    if(!currentUser){
+                                        setIsUnregisterBox(true)
+                                    } else {
+                                        getFollowersOrFollowing("following");
+                                        setIsFollowForm(true);
+                                    }
                                 }}
                                     className="text-s text-grey"
                                     style={{cursor:"pointer"}}>{user._count.following} following</p>

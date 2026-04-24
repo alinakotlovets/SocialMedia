@@ -28,6 +28,7 @@ export function ParentPost({parentPost, post, currentUser, onEditParent, onDelet
         )}
         {post && (
             <PostItem currentUser={currentUser}
+                      key={post.id}
                       post={post}
                       onEdit={onEdit}
                       repliesCount={repliesCount}

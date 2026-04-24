@@ -110,7 +110,7 @@ export function PostItem({currentUser, post, onEdit, onDelete, onClick,
                           className="text-s text-grey">
                            @{post.user.username}</p>
                        <p className="text-s text-grey">{formatDate(post.createdAt) !== formatDate(post.editedAt) ?
-                           `edited ${formatDate(post.editedAt)} ago` : formatDate(post.createdAt)}</p>
+                           `edited ${formatDate(post.editedAt)}` : formatDate(post.createdAt)}</p>
                    </div>
                    <div className="more-menu-wrapper" ref={menuRef}>
                        {currentUser && post.userId === currentUser.id &&(

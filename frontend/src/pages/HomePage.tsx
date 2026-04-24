@@ -1,20 +1,13 @@
 import {PostBox} from "../components/PostBox.tsx";
-import {UnregisteredBox} from "../components/ui/UnregisteredBox.tsx";
 import "./HomePage.css"
-import {useCurrentUser} from "../utils/useCurrentUser.ts";
+import {useCurrentUserContext} from "../context/CurrentUserContext.tsx";
+
 export function HomePage(){
-    const currentUser = useCurrentUser();
+    const { currentUser} = useCurrentUserContext()
 
     return(
         <>
             <PostBox currentUser={currentUser}/>
-
-            {!currentUser &&(
-                <div className="unregistered-box">
-                    <UnregisteredBox/>
-                </div>
-            )}
         </>
-
     )
 }

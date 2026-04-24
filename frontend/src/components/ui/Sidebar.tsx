@@ -5,7 +5,7 @@ import themeIcon from "../../assets/theme.png"
 import profileIcon from "../../assets/user.png"
 import searchIcon from "../../assets/search.png"
 import "./Sidebar.css"
-import {useCurrentUser} from "../../utils/useCurrentUser.ts";
+import {useCurrentUserContext} from "../../context/CurrentUserContext.tsx";
 import {useNavigate} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
 import {usePosts} from "../../context/PostsContext.tsx";
@@ -20,7 +20,7 @@ export function Sidebar(){
     const [isThemeOption, setIsThemeOption] = useState<boolean>(false);
     const navigate = useNavigate();
 
-    const currentUser = useCurrentUser();
+    const {currentUser} = useCurrentUserContext()
     const {addPost} = usePosts();
     const {addUsersPosts} = useUserPosts();
 

@@ -88,6 +88,7 @@ export function PostBox({currentUser}:PostBoxProps){
                     <ul className="post-list">
                         {activePosts.map((post)=>
                            <PostItem currentUser={currentUser}
+                                     key={post.id}
                                      post={post}
                                      repliesCount={post._count.replies}
                                      onEdit={(post) => {

@@ -2,7 +2,7 @@ import defaultAvatar from "../assets/defaultAvatar.png";
 import type {User} from "../types/User.ts";
 import {useState} from "react";
 import Client from "../api/client.ts";
-import {useCurrentUser} from "../utils/useCurrentUser.ts";
+import {useCurrentUserContext} from "../context/CurrentUserContext.tsx";
 import {useNavigate} from "react-router-dom";
 import "./UserItem.css"
 
@@ -13,7 +13,7 @@ type UserItemParams={
 export function UserItem({user, handleUserClick}:UserItemParams){
     const [isFollow, setIsFollow] = useState(user.followers && user.followers.length>0);
 
-    const currenUser = useCurrentUser();
+    const {currentUser} = useCurrentUserContext();
     const navigate = useNavigate();
 
     async function handleFollowClick() {
@@ -38,7 +38,7 @@ export function UserItem({user, handleUserClick}:UserItemParams){
                     <p className="text-s text-grey">@{user.username}</p>
                 </div>
             </div>
-            {(currenUser && currenUser.id !== user.id) && (
+            {(currentUser && currentUser.id !== user.id) && (
                 <button
                 onClick={(e)=>{
                     e.stopPropagation();

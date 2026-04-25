@@ -5,6 +5,8 @@ import {parseId} from "../utils/parseId";
 import {AppError} from "../utils/AppError";
 import {parseOptionalId} from "../utils/parseOptionalId";
 import {userServices} from "../services/userServices";
+import {uploadFiles} from "../utils/uploadFiles";
+
 
 export async function addPost(req:Request, res:Response){
     const userId = getUserId(req);
@@ -14,21 +16,33 @@ export async function addPost(req:Request, res:Response){
         const post = await postServices.getPostById(postId, userId);
         if(!post) throw new AppError(404, "Post with this id not found");
     }
-    const post = await postServices.createPost(text, userId, postId);
+
+    const files = (req.files as Express.Multer.File[]) ?? [];
+    const media = await uploadFiles(files, "SocialMediaFiles");
+    const post = await postServices.createPost(text, userId, postId, media);
     res.status(201).json({post});
 }
 
-export async function editPost(req:Request, res:Response){
-    const {text} = req.body;
-    const postId = parseId(req.params.postId, "Post id");
+export async function editPost(req: Request, res: Response) {
+    const { text, keepMediaIds } = req.body;
+    const parsedKeepIds: number[] = keepMediaIds ? JSON.parse(keepMediaIds) : [];
 
+    const postId = parseId(req.params.postId, "Post id");
     const userId = getUserId(req);
+
     const postFromDb = await postServices.getPostById(postId, userId);
     if (!postFromDb) throw new AppError(404, "Post with this id not found");
-    if(postFromDb.userId !== userId) throw new AppError(403, "You not author of this post");
+    if (postFromDb.userId !== userId) throw new AppError(403, "You not author of this post");
 
-    const post = await postServices.updatePost(postId, text);
-    res.status(200).json({post});
+    const files = (req.files as Express.Multer.File[]) ?? [];
+
+    if (parsedKeepIds.length + files.length > 2) {
+        throw new AppError(400, "Maximum 2 media per post");
+    }
+
+    const newMedia = await uploadFiles(files, "SocialMediaFiles");
+    const post = await postServices.updatePost(postId, text, parsedKeepIds, newMedia);
+    res.status(200).json({ post });
 }
 
 export async function deletePost(req:Request, res:Response){

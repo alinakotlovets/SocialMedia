@@ -7,6 +7,11 @@ datasource db {
   provider = "postgresql"
 }
 
+enum MediaType {
+  IMAGE
+  VIDEO
+}
+
 model User {
   id          Int      @id @default(autoincrement())
   username    String   @unique
@@ -33,6 +38,7 @@ model Post {
   parent    Post?    @relation("PostReplies", fields: [parentId], references: [id], onDelete: Cascade)
   replies   Post[]   @relation("PostReplies")
   likes     Like[]
+  media     Media[]
 }
 
 model Like {
@@ -54,4 +60,12 @@ model Follow {
   createdAt   DateTime @default(now())
 
   @@unique([followerId, followingId])
+}
+
+model Media {
+  id     Int       @id @default(autoincrement())
+  postId Int
+  post   Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  type   MediaType
+  url    String
 }

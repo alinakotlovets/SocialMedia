@@ -13,6 +13,7 @@ import {Modal} from "./ui/Modal.tsx";
 import {UnregisteredBox} from "./ui/UnregisteredBox.tsx";
 import {useNavigate} from "react-router-dom";
 import * as React from "react";
+import {usePosts} from "../context/PostsContext.tsx";
 
 type PostItemProps = {
     currentUser: User | null,
@@ -21,11 +22,15 @@ type PostItemProps = {
     onDelete: (id:number)=>void,
     onClick?: () => void,
     hasThread?: boolean,
-    repliesCount?:number
+    sonHasThread?: boolean,
+    repliesCount?:number,
+    setActiveVideoId: (value: number) => void,
+    activeVideoId: number | null
 }
 
 export function PostItem({currentUser, post, onEdit, onDelete, onClick,
-                             hasThread, repliesCount}:PostItemProps){
+                             hasThread, repliesCount, setActiveVideoId, activeVideoId,
+                             sonHasThread}:PostItemProps){
 
     const menuRef = useRef<HTMLDivElement>(null);
     const [errors, setErrors] = useState<string[]>([]);
@@ -40,6 +45,8 @@ export function PostItem({currentUser, post, onEdit, onDelete, onClick,
         onDelete(post.id);
     }
 
+    const {posts, setPosts} = usePosts();
+
     async function handleLike(){
         if (isLiking) return;
         setErrors([]);
@@ -53,8 +60,12 @@ export function PostItem({currentUser, post, onEdit, onDelete, onClick,
         if(response.message){
           if(like){
               setLikeCount(likeCount-1);
+              setPosts(posts.map(p => p.id === post.id ? { ...p, likes: [],
+                  _count: { ...p._count, likes: p._count.likes - 1 } } : p));
           } else {
               setLikeCount(likeCount+1);
+              setPosts(posts.map(p => p.id === post.id ? { ...p, likes: [{ id: post.id }],
+                      _count: { ...p._count, likes: p._count.likes + 1 } } : p));
           }
           setLike(!like);
         }
@@ -81,8 +92,20 @@ export function PostItem({currentUser, post, onEdit, onDelete, onClick,
         navigate(`/user/${post.userId}`);
     }
 
+    const videoRefs = useRef<Map<number, HTMLVideoElement>>(new Map());
+
+    useEffect(() => {
+        videoRefs.current.forEach((videoEl, mediaId) => {
+            if (mediaId !== activeVideoId) {
+                videoEl.pause();
+            }
+        });
+    }, [activeVideoId]);
+
     return(
-       <li key={post.id} className={`post-list-item ${hasThread ? "has-thread" : ""}`}
+       <li key={post.id} className={`post-list-item 
+       ${hasThread ? "has-thread" : ""}
+       ${sonHasThread ? "son-has-thread" : ""}`}
            onClick={()=> onClick ? onClick() : navigate(`/post/${post.id}`)}>
            {showLoginForm && (
                <Modal onClose={()=>setShowLoginForm(false)} closeOnOverlayClick={true}>
@@ -136,7 +159,30 @@ export function PostItem({currentUser, post, onEdit, onDelete, onClick,
                        )}
                    </div>
                </div>
-               <h3 className="text-s">{post.text}</h3>
+               <p className="text-s post-text">{post.text}</p>
+               {post.media?.length >0 &&(
+                   <ul className={`media-list ${post.media.length === 1 ? "one" : "two"}`}>
+                       {post.media.map((m)=>
+                       <li key={m.id} className="media-item">
+                           {m.type === "IMAGE" && (
+                               <img onClick={(e)=>e.stopPropagation()}
+                                   src={m.url} alt="post image"/>
+                           )}
+                           {m.type === "VIDEO" && (
+                               <video  ref={(el) => {
+                                       if (el) videoRefs.current.set(m.id, el);
+                                       else videoRefs.current.delete(m.id);
+                                       }}
+                                       onClick={(e) => {
+                                           setActiveVideoId(m.id);
+                                           e.stopPropagation();
+                                       }}
+                                       src={m.url} controls></video>
+                           )}
+                       </li>
+                       )}
+                   </ul>
+               )}
                <div className="post-item-action-box">
                    <button className="like-btn button" onClick={(e)=>{
                        e.stopPropagation()

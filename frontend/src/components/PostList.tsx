@@ -3,15 +3,16 @@ import type {User} from "../types/User.ts";
 import {PostItem} from "./PostItem.tsx";
 import {ParentPost} from "./ParentPost.tsx";
 
-export function PostList({ posts, currentUser, navigate, isReply, onEdit, onDelete}: {
+export function PostList({ posts, currentUser, navigate, isReply, onEdit, onDelete, activeVideoId, setActiveVideoId}: {
     posts: Post[],
     currentUser: User | null,
     isReply: boolean,
     onEdit: (post: Post) => void,
+    setActiveVideoId: (value: number)=>void,
+    activeVideoId: number | null,
     onDelete: (id: number) => void,
     navigate: (path: string) => void }) {
     if (posts.length === 0) return <div className="no-posts"><h3>No posts</h3></div>;
-
 
     return (
         <ul>
@@ -21,6 +22,8 @@ export function PostList({ posts, currentUser, navigate, isReply, onEdit, onDele
                     currentUser={currentUser}
                     post={post}
                     onEdit={onEdit}
+                    setActiveVideoId={setActiveVideoId}
+                    activeVideoId={activeVideoId}
                     repliesCount={post._count.replies}
                     onClick={() => navigate(`/post/${post.id}`)}
                     onDelete={(id) => onDelete(id)}
@@ -32,6 +35,8 @@ export function PostList({ posts, currentUser, navigate, isReply, onEdit, onDele
                             post={post}
                             currentUser={currentUser}
                             onEditParent={onEdit}
+                            setActiveVideoId={setActiveVideoId}
+                            activeVideoId={activeVideoId}
                             onDeleteParent={(id)=>onDelete(id)}
                             onEdit={onEdit}
                             onDelete={(id) => onDelete(id)}/>

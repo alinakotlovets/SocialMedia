@@ -6,6 +6,7 @@ import {PostItem} from "../components/PostItem.tsx";
 import {useCurrentUserContext} from "../context/CurrentUserContext.tsx";
 import {Modal} from "../components/ui/Modal.tsx";
 import {AddEditPostForm} from "../components/AddEditPostForm.tsx";
+import {usePosts} from "../context/PostsContext.tsx";
 
 export function PostsSearchPage() {
     const [errors, setErrors] =useState<string[]>([]);
@@ -15,6 +16,7 @@ export function PostsSearchPage() {
     const [editingPost, setEditingPost] = useState<Post | null>(null);
     const [isAddEditPost, setIsAddEditPost] = useState(false);
     const search = searchParams.get("search") ?? "";
+    const { activeVideoId, setActiveVideoId } = usePosts();
 
     const {currentUser} = useCurrentUserContext();
 
@@ -72,6 +74,8 @@ export function PostsSearchPage() {
                         <PostItem currentUser={currentUser}
                                   key={post.id}
                                   post={post}
+                                  setActiveVideoId={setActiveVideoId}
+                                  activeVideoId={activeVideoId}
                                   onEdit={()=>{
                                       setIsAddEditPost(true);
                                       setEditingPost(post);

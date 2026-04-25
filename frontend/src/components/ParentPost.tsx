@@ -11,16 +11,20 @@ type ParentPostProps={
     onDeleteParent: (id: number)=>void,
     onEdit: (post: Post) => void,
     onDelete: (id: number) => void,
-    repliesCount?: number
+    repliesCount?: number,
+    setActiveVideoId: (value: number) => void,
+    activeVideoId:number | null,
 }
 export function ParentPost({parentPost, post, currentUser, onEditParent, onDeleteParent,
-                               onEdit, onDelete, repliesCount}:ParentPostProps){
+                               onEdit, onDelete, repliesCount, activeVideoId, setActiveVideoId}:ParentPostProps){
     return(<>
         {parentPost && (
             <PostItem
                 currentUser={currentUser}
                 post={parentPost}
                 onEdit={onEditParent}
+                setActiveVideoId={setActiveVideoId}
+                activeVideoId={activeVideoId}
                 onDelete={onDeleteParent}
                 repliesCount={parentPost._count.replies}
                 hasThread={true}
@@ -29,8 +33,11 @@ export function ParentPost({parentPost, post, currentUser, onEditParent, onDelet
         {post && (
             <PostItem currentUser={currentUser}
                       key={post.id}
+                      setActiveVideoId={setActiveVideoId}
+                      activeVideoId={activeVideoId}
                       post={post}
                       onEdit={onEdit}
+                      sonHasThread={true}
                       repliesCount={repliesCount}
                       onDelete={onDelete}/>
         )}

@@ -1,4 +1,5 @@
 import type {User} from "./User.ts";
+import type {media} from "./Media.ts";
 type Likes = {"id": number};
 export type Post ={
     id: number,
@@ -13,5 +14,6 @@ export type Post ={
         "replies": number
     }
     likes:Likes[],
-    user: User
+    user: User,
+    media: media[]
 }

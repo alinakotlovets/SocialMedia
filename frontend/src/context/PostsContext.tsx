@@ -5,19 +5,22 @@ type PostsContextType = {
     posts: Post[],
     setPosts: (posts: Post[]) => void,
     addPost: (post: Post) => void,
+    activeVideoId: number | null,
+    setActiveVideoId: (id: number | null) => void
 }
 
 const PostsContext = createContext<PostsContextType | null>(null);
 
 export function PostsProvider({children}: {children: React.ReactNode}){
     const [posts, setPosts] = useState<Post[]>([]);
+    const [activeVideoId, setActiveVideoId] = useState<number | null>(null);
 
     function addPost(post: Post){
         setPosts(prev => [post, ...prev]);
     }
 
     return(
-        <PostsContext.Provider value={{posts, setPosts, addPost}}>
+        <PostsContext.Provider value={{posts, setPosts, addPost,  activeVideoId, setActiveVideoId}}>
             {children}
         </PostsContext.Provider>
     )

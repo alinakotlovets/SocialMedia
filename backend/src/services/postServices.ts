@@ -1,28 +1,43 @@
 import {prisma} from "../../lib/prisma";
 import type {PostWithUser} from "../types/Post";
 export const postServices = {
-    createPost: async(text:string, userId:number, postId: number | null):Promise<PostWithUser>=>
+    createPost: async(text:string, userId:number, postId: number | null, mediaFiles: { url: string, type: "VIDEO" | "IMAGE" }[]):Promise<PostWithUser>=>
         prisma.post.create({
             data: {
                 text,
                 userId,
-                parentId: postId
+                parentId: postId,
+                media: {
+                    create: mediaFiles
+                }
             },
             include:{
+                media: {},
                 user: {
                     select:{id:true, username: true, displayName:true, avatar:true}
                 },
                 _count: { select: { replies: true, likes: true } }
             }
         }),
-    updatePost: async(postId: number, text:string):Promise<PostWithUser>=>
+    updatePost: async(postId: number, text:string, keepMediaIds: number[],
+                      newMediaFiles: { url: string, type: "VIDEO" | "IMAGE" }[]):Promise<PostWithUser>=>
         prisma.post.update({
             where: {id: postId},
-            data:{text},
-            include: {
-                user: {
-                        select: {id:true, username: true, displayName:true, avatar:true}
+            data:{
+                text,
+                media: {
+                    deleteMany: {
+                        postId,
+                        id: { notIn: keepMediaIds }
                     },
+                    create: newMediaFiles
+                }
+            },
+            include: {
+                media: {},
+                user: {
+                    select: {id:true, username: true, displayName:true, avatar:true}
+                },
                 _count: { select: { replies: true, likes: true } }
             }
         }),
@@ -30,6 +45,7 @@ export const postServices = {
         prisma.post.findUnique({
             where:{id},
             include:{
+                media: {},
                 user:
                     {select:
                             {id:true, username: true, displayName:true, avatar:true}
@@ -50,6 +66,7 @@ export const postServices = {
                 ...(cursorId ? {id: {lt: cursorId}} :{})
             },
             include:{
+                media: {},
                 user:{
                     select: {id:true, username: true, displayName:true, avatar:true}
                 },
@@ -72,6 +89,7 @@ export const postServices = {
                 ...(cursorId ? {id: {lt: cursorId}} :{})
             },
             include:{
+                media: {},
                 user:
                     {select:
                             {id:true, username: true, displayName:true, avatar:true}
@@ -94,6 +112,7 @@ export const postServices = {
                 ...(cursorId ? {id: {lt: cursorId}} :{})
             },
             include:{
+                media: {},
                 user:
                     {select:
                             {id:true, username: true, displayName:true, avatar:true}
@@ -123,6 +142,7 @@ export const postServices = {
             ...(cursorId ? { id: { lt: cursorId } } : {})
             },
         include: {
+            media: {},
             user:
                 {select:
                         {id:true, username: true, displayName:true, avatar:true}
@@ -146,6 +166,7 @@ export const postServices = {
                 ...(cursorId ? { id: { lt: cursorId } } : {})
             },
             include: {
+                media: {},
                 user:
                     {select:
                             {id:true, username: true, displayName:true, avatar:true}

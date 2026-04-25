@@ -17,7 +17,8 @@ export function PostBox({currentUser}:PostBoxProps){
     const [editingPost, setEditingPost] = useState<Post | null>(null);
     const [errors, setErrors] = useState<{posts: string[], following:string[]}>({posts:[], following:[]});
     const [following, setFollowing] = useState<Post[]>([]);
-    const [feedType, setFeedType] = useState<"posts" | "following">("posts")
+    const [feedType, setFeedType] = useState<"posts" | "following">("posts");
+    const { activeVideoId, setActiveVideoId } = usePosts();
 
     const {posts, setPosts} = usePosts();
     async function getPosts(cursorId: number | null) {
@@ -35,6 +36,7 @@ export function PostBox({currentUser}:PostBoxProps){
     }
 
     useEffect(() => {
+        setActiveVideoId(null);
         getPosts(null);
         getFollowingPosts(null);
     }, []);
@@ -90,6 +92,8 @@ export function PostBox({currentUser}:PostBoxProps){
                            <PostItem currentUser={currentUser}
                                      key={post.id}
                                      post={post}
+                                     setActiveVideoId={setActiveVideoId}
+                                     activeVideoId={activeVideoId}
                                      repliesCount={post._count.replies}
                                      onEdit={(post) => {
                                          setEditingPost(post);

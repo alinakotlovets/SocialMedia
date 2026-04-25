@@ -13,6 +13,7 @@ import {EditUserForm} from "../components/EditUserForm.tsx";
 import {AddEditPostForm} from "../components/AddEditPostForm.tsx";
 import {useUserPosts} from "../context/UsersPostsContext.tsx";
 import {UnregisteredBox} from "../components/ui/UnregisteredBox.tsx";
+import {usePosts} from "../context/PostsContext.tsx";
 
 export function UserPage(){
     const {userId} = useParams();
@@ -37,6 +38,7 @@ export function UserPage(){
     const [editingPost, setEditingPost] = useState<Post | null>(null);
     const [isAddEditPost, setIsAddEditPost] = useState(false);
     const [isUnregisterBox, setIsUnregisterBox] = useState<boolean>(false);
+    const { activeVideoId, setActiveVideoId } = usePosts();
 
     const {currentUser} = useCurrentUserContext();
     const navigate = useNavigate();
@@ -271,6 +273,8 @@ export function UserPage(){
                         : <PostList
                             posts={data}
                             currentUser={currentUser}
+                            setActiveVideoId={setActiveVideoId}
+                            activeVideoId={activeVideoId}
                             isReply={isReply}
                             navigate={navigate}
                             onEdit={handleEdit}

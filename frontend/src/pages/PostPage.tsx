@@ -9,6 +9,7 @@ import {WhatsNewBox} from "../components/WhatsNewBox.tsx";
 import "./HomePage.css";
 import {ParentPost} from "../components/ParentPost.tsx";
 import {useCurrentUserContext} from "../context/CurrentUserContext.tsx";
+import {usePosts} from "../context/PostsContext.tsx";
 
 export function PostPage(){
     const { postId } = useParams();
@@ -22,6 +23,7 @@ export function PostPage(){
     const [parentPost, setParentPost] = useState<Post | null>(null);
     const [repliesCount, setRepliesCount] = useState<number>(0);
     const { currentUser} = useCurrentUserContext();
+    const {activeVideoId, setActiveVideoId } = usePosts();
 
     const navigate = useNavigate();
 
@@ -99,6 +101,8 @@ export function PostPage(){
                                 onEditParent={(p:Post) => { setEditingPost(p); setIsAddEdit(true); }}
                                 onDeleteParent={() => navigate("/")}
                                 repliesCount={repliesCount}
+                                setActiveVideoId={setActiveVideoId}
+                                activeVideoId={activeVideoId}
                                 onEdit={()=>{
                                     setEditingPost(post);
                                     setIsAddEdit(true)
@@ -111,6 +115,8 @@ export function PostPage(){
                 <PostItem currentUser={currentUser}
                           key={post.id}
                           post={post}
+                          setActiveVideoId={setActiveVideoId}
+                          activeVideoId={activeVideoId}
                           repliesCount={repliesCount}
                           onEdit={()=>{
                               setEditingPost(post);
@@ -137,6 +143,8 @@ export function PostPage(){
                 <PostItem currentUser={currentUser}
                           key={r.id}
                           post={r}
+                          setActiveVideoId={setActiveVideoId}
+                          activeVideoId={activeVideoId}
                           onEdit={()=>{
                               setEditingPost(r);
                               setIsAddEdit(true)

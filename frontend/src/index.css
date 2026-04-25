@@ -192,7 +192,7 @@ textarea {
   align-items: start;
   justify-content: center;
   gap: 30px;
-  padding: 30px 40px;
+  padding: 30px 40px 0 40px;
   width: 100%;
   min-height: calc(100vh - 40px);
   height: 100%;
@@ -203,4 +203,9 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height: 100px;
+}
+
+.post-text {
+  white-space: pre-wrap;
 }

@@ -14,6 +14,7 @@ import {AddEditPostForm} from "../components/AddEditPostForm.tsx";
 import {useUserPosts} from "../context/UsersPostsContext.tsx";
 import {UnregisteredBox} from "../components/ui/UnregisteredBox.tsx";
 import {usePosts} from "../context/PostsContext.tsx";
+import {useInfiniteScrollOnScroll} from "../hooks/useInfiniteScroll.ts";
 
 export function UserPage(){
     const {userId} = useParams();
@@ -40,10 +41,26 @@ export function UserPage(){
     const [isUnregisterBox, setIsUnregisterBox] = useState<boolean>(false);
     const { activeVideoId, setActiveVideoId } = usePosts();
 
+
     const {currentUser} = useCurrentUserContext();
     const navigate = useNavigate();
 
     const {posts, setPosts} = useUserPosts();
+    const {addUsersPosts} = useUserPosts();
+
+    const {posts: globalPosts} = usePosts();
+
+    useEffect(() => {
+        const latestPost = globalPosts[0];
+
+        if (!latestPost) return;
+
+        if (latestPost.user.id === Number(userId)) {
+            addUsersPosts(latestPost);
+        }
+
+    }, [globalPosts]);
+
 
     useEffect(() => {
         setIsFollowForm(false);
@@ -155,6 +172,30 @@ export function UserPage(){
     }
 
 
+    function getLinkAndSetItem(){
+        if(chosenPosts === "posts") {
+            return {link: `/posts/user/${userId}`, setItem: setPosts};
+        }
+
+        if(chosenPosts === "liked") {
+            return {link: `/user/${userId}/liked-posts`, setItem: setLikedPosts};
+        }
+
+        if(chosenPosts === "replies") {
+            return {link: `/user/${userId}/replies`, setItem: setReplies};
+        }
+        return {link: "", setItem: () => {}};
+    }
+
+    const linkAndSetItem = getLinkAndSetItem();
+
+    useInfiniteScrollOnScroll({
+        items: data,
+        setItems: linkAndSetItem.setItem,
+        link: linkAndSetItem.link,
+        textRes: "posts"
+    });
+
     return(
         <div className="post-box">
             {isFollowForm &&(
@@ -162,7 +203,10 @@ export function UserPage(){
                     <FollowUsersList followers={followers} following={following}
                                      followersOrFollowing={followersOrFollowing}
                                      setIsFollowForm={setIsFollowForm}
-                                     onTabChange={(type)=>getFollowersOrFollowing(type)}/>
+                                     onTabChange={(type)=>getFollowersOrFollowing(type)}
+                                     setFollowers={setFollowers}
+                                     setFollowing={setFollowing}
+                                     userId={userId!}/>
                 </Modal>
             )}
 
@@ -270,16 +314,16 @@ export function UserPage(){
                 </div>
                     {isLoading
                         ? <h3>Loading...</h3>
-                        : <PostList
-                            posts={data}
-                            currentUser={currentUser}
-                            setActiveVideoId={setActiveVideoId}
-                            activeVideoId={activeVideoId}
-                            isReply={isReply}
-                            navigate={navigate}
-                            onEdit={handleEdit}
-                            onDelete={handleDelete}
-                        />
+                        :  <PostList
+                                posts={data}
+                                currentUser={currentUser}
+                                setActiveVideoId={setActiveVideoId}
+                                activeVideoId={activeVideoId}
+                                isReply={isReply}
+                                navigate={navigate}
+                                onEdit={handleEdit}
+                                onDelete={handleDelete}/>
+
                     }
 
         </div>

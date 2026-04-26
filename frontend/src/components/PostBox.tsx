@@ -8,6 +8,7 @@ import "./PostBox.css"
 import type {Post} from "../types/Post.ts";
 import Client from "../api/client.ts";
 import {usePosts} from "../context/PostsContext.tsx";
+import {useInfiniteScrollOnScroll} from "../hooks/useInfiniteScroll.ts";
 
 type PostBoxProps = {
     currentUser: User | null
@@ -44,6 +45,13 @@ export function PostBox({currentUser}:PostBoxProps){
     const activePosts = feedType === "posts" ? posts : following;
     const setActivePosts = feedType === "posts" ? setPosts : setFollowing;
 
+    useInfiniteScrollOnScroll({
+        items: activePosts,
+        setItems: setActivePosts,
+        link: feedType === "posts" ? "/posts" : "/posts/following",
+        textRes: "posts"
+    });
+
     return(
         <div  className="post-box">
             {currentUser &&(
@@ -63,9 +71,9 @@ export function PostBox({currentUser}:PostBoxProps){
                                      currentUser={currentUser}
                                      onSuccess={(newPost) => {
                                          if (editingPost) {
-                                             setActivePosts(posts.map(p => p.id === newPost.id ? newPost : p));
+                                             setActivePosts(activePosts.map(p => p.id === newPost.id ? newPost : p));
                                          } else {
-                                             setActivePosts([newPost, ...posts]);
+                                             setActivePosts([newPost, ...activePosts]);
                                          }
                                          setEditingPost(null);
                                      }}

@@ -11,7 +11,6 @@ import {useEffect, useRef, useState} from "react";
 import {usePosts} from "../../context/PostsContext.tsx";
 import {AddEditPostForm} from "../AddEditPostForm.tsx";
 import {Modal} from "./Modal.tsx";
-import {useUserPosts} from "../../context/UsersPostsContext.tsx";
 
 export function Sidebar(){
 
@@ -22,7 +21,6 @@ export function Sidebar(){
 
     const {currentUser} = useCurrentUserContext()
     const {addPost} = usePosts();
-    const {addUsersPosts} = useUserPosts();
 
     function handleLogOut(){
         localStorage.removeItem("token");
@@ -52,7 +50,6 @@ export function Sidebar(){
                                      currentUser={currentUser}
                                      onSuccess={(post) => {
                                          addPost(post);
-                                         addUsersPosts(post);
                                          setIsAddPost(false);
                                      }}
                                      setIsAddEditPost={setIsAddPost}/>

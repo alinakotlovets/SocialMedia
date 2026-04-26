@@ -7,6 +7,7 @@ import {useCurrentUserContext} from "../context/CurrentUserContext.tsx";
 import {Modal} from "../components/ui/Modal.tsx";
 import {AddEditPostForm} from "../components/AddEditPostForm.tsx";
 import {usePosts} from "../context/PostsContext.tsx";
+import {useInfiniteScrollOnScroll} from "../hooks/useInfiniteScroll.ts";
 
 export function PostsSearchPage() {
     const [errors, setErrors] =useState<string[]>([]);
@@ -18,6 +19,7 @@ export function PostsSearchPage() {
     const search = searchParams.get("search") ?? "";
     const { activeVideoId, setActiveVideoId } = usePosts();
 
+
     const {currentUser} = useCurrentUserContext();
 
     useEffect(() => {
@@ -28,17 +30,25 @@ export function PostsSearchPage() {
             const response = await Client(`/posts/search?search=${search}`, "GET");
             if(response.errors) setErrors(response.errors);
             if (response.posts) setPosts(response.posts);
+            setIsLoading(false);
         }
 
         getPosts();
-        setIsLoading(false);
-    }, []);
+    }, [search]);
 
     function handlePostUpdated(updatedPost: Post) {
         setPosts(posts.map(p => p.id === updatedPost.id ? updatedPost : p));
         setEditingPost(null);
     }
 
+
+    useInfiniteScrollOnScroll({
+        items: posts,
+        setItems: setPosts,
+        link: `/posts/search`,
+        textRes: "posts",
+        search: `${search}`
+    });
 
     return(
         <div className="post-box">
@@ -67,7 +77,7 @@ export function PostsSearchPage() {
             {!isLoading && posts.length === 0 && (
                 <p className="text-s text-grey">Posts not found</p>
             )}
-
+            
             {!isLoading && posts.length>0 &&(
                 <ul>
                     {posts.map((post)=>

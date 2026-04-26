@@ -79,7 +79,7 @@ export const postServices = {
             orderBy: {
                 id: "desc"
             },
-            take: 50
+            take: 20
         }),
     getPostsByUserId: async(userId:number, cursorId:number|null):Promise<PostWithUser[]>=>
         prisma.post.findMany({
@@ -103,7 +103,7 @@ export const postServices = {
             orderBy: {
                 id: "desc"
             },
-            take: 50
+            take: 20
         }),
     getPostReplies: async(postId: number, userId: number | null, cursorId:number|null)=>
         prisma.post.findMany({
@@ -126,7 +126,7 @@ export const postServices = {
             orderBy: {
                 id: "asc"
             },
-            take: 50
+            take: 20
         }),
     getFollowingPosts: async(userId:number, cursorId:number|null):Promise<PostWithUser[]> =>
     prisma.post.findMany({
@@ -154,7 +154,7 @@ export const postServices = {
             _count: { select: { replies: true, likes: true } }
         },
         orderBy: { id: "desc" },
-        take: 50
+        take: 20
         }),
     findPosts: async(search: string, userId: number, cursorId:number|null):Promise<PostWithUser[]>=>
         prisma.post.findMany({
@@ -178,6 +178,6 @@ export const postServices = {
                 _count: { select: { replies: true, likes: true } }
             },
             orderBy: { id: "desc" },
-            take: 50
+            take: 20
         })
 }

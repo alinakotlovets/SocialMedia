@@ -6,6 +6,7 @@ import {useNavigate} from "react-router-dom";
 import "./SearchPage.css"
 import SearchIcon from "../assets/search.png"
 import rightArrow from "../assets/right-arrow.png"
+import {useInfiniteScrollOnScroll} from "../hooks/useInfiniteScroll.ts";
 
 export function SearchPage(){
     const [inputValue, setInputValue] = useState<string>("");
@@ -14,10 +15,10 @@ export function SearchPage(){
     const [loading, setLoading] = useState(false);
     const abortRef = useRef<AbortController | null>(null);
 
+
     useEffect(() => {
         setLoading(true);
         setUsers([]);
-
         const trimmed = inputValue.trim();
         if (!trimmed) {
             setLoading(false)
@@ -45,6 +46,14 @@ export function SearchPage(){
     }, [inputValue]);
 
     const navigate = useNavigate();
+
+    useInfiniteScrollOnScroll({
+        items: users,
+        setItems: setUsers,
+        link: `/user/search`,
+        textRes: "users",
+        search: `${encodeURIComponent(inputValue.trim())}`
+    });
 
     return(
         <div className="post-box">

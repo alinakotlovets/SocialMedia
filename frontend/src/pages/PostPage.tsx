@@ -10,6 +10,7 @@ import "./HomePage.css";
 import {ParentPost} from "../components/ParentPost.tsx";
 import {useCurrentUserContext} from "../context/CurrentUserContext.tsx";
 import {usePosts} from "../context/PostsContext.tsx";
+import {useInfiniteScrollOnScroll} from "../hooks/useInfiniteScroll.ts";
 
 export function PostPage(){
     const { postId } = useParams();
@@ -62,6 +63,14 @@ export function PostPage(){
         setLoading((prev)=>({...prev, replies:false}))
 
     }, [post]);
+
+
+    useInfiniteScrollOnScroll({
+        items: replies,
+        setItems: setReplies,
+        link: post ? `/posts/${post.id}/replies` : undefined,
+        textRes: "replies"
+    });
 
 
     return(
@@ -140,20 +149,20 @@ export function PostPage(){
                 </div>
             )}
             {loading.replies === false && replies.length>0 && replies.map((r)=>(
-                <PostItem currentUser={currentUser}
-                          key={r.id}
-                          post={r}
-                          setActiveVideoId={setActiveVideoId}
-                          activeVideoId={activeVideoId}
-                          onEdit={()=>{
-                              setEditingPost(r);
-                              setIsAddEdit(true)
-                          }}
-                          repliesCount={r._count.replies}
-                          onClick={() => navigate(`/post/${r.id}`)}
-                          onDelete={() => {
-                              setReplies(replies.filter((repl) => repl.id !== r.id));
-                              setRepliesCount((prev:number) => prev - 1)}}/>
+                   <PostItem currentUser={currentUser}
+                             key={r.id}
+                             post={r}
+                             setActiveVideoId={setActiveVideoId}
+                             activeVideoId={activeVideoId}
+                             onEdit={()=>{
+                                 setEditingPost(r);
+                                 setIsAddEdit(true)
+                             }}
+                             repliesCount={r._count.replies}
+                             onClick={() => navigate(`/post/${r.id}`)}
+                             onDelete={() => {
+                                 setReplies(replies.filter((repl) => repl.id !== r.id));
+                                 setRepliesCount((prev:number) => prev - 1)}}/>
             ))}
         </div>
     )

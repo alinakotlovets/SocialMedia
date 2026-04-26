@@ -188,3 +188,28 @@
 .media-item video {
     object-fit: cover;
 }
+
+
+.share-wrapper {
+    position: relative;
+}
+
+.share-menu {
+    position: absolute;
+    bottom: calc(100% + 2px);
+    right: 0;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 4px;
+    white-space: nowrap;
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.share-menu button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    width: 100%;
+    text-align: left;
+}

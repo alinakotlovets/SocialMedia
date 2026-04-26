@@ -151,7 +151,7 @@ export const postServices = {
                 where: { userId },
                 select: { id: true }
             } : false,
-            _count: { select: { replies: true, likes: true } }
+            _count: { select: { replies: true, likes: true}}
         },
         orderBy: { id: "desc" },
         take: 20
@@ -175,9 +175,54 @@ export const postServices = {
                     where: { userId },
                     select: { id: true }
                 } : false,
-                _count: { select: { replies: true, likes: true } }
+                _count: { select: { replies: true, likes: true}}
             },
             orderBy: { id: "desc" },
             take: 20
-        })
+        }),
+    // toggleRepost: async(postId: number, userId: number) => {
+    //     const targetPost = await prisma.post.findUnique({
+    //         where: { id: postId },
+    //         select: { repostOfId: true }
+    //     });
+    //
+    //     if (!targetPost) throw new Error("Post not found");
+    //
+    //     const realPostId = targetPost?.repostOfId ?? postId;
+    //
+    //     if (targetPost.repostOfId) {
+    //         const originalExists = await prisma.post.findUnique({
+    //             where: { id: realPostId },
+    //             select: { id: true }
+    //         });
+    //         if (!originalExists) throw new Error("Original post not found");
+    //     }
+    //
+    //     const existing = await prisma.post.findFirst({
+    //         where: { userId, repostOfId: realPostId }
+    //     });
+    //
+    //     if (existing) {
+    //         await prisma.post.delete({ where: { id: existing.id } });
+    //         return { repost: null, isReposted: false };
+    //     }
+    //
+    //     const repost = await prisma.post.create({
+    //         data: { userId, text: "", repostOfId: realPostId },
+    //         include: {
+    //             media: {},
+    //             repostOf: {
+    //                 include: {
+    //                     media: {},
+    //                     user: { select: {id:true, username: true, displayName:true, avatar:true} },
+    //                     _count: { select: { replies: true, likes: true, reposts: true }}
+    //                 }
+    //             },
+    //             user: { select: {id:true, username: true, displayName:true, avatar:true} },
+    //             _count: { select: { replies: true, likes: true, reposts: true } }
+    //         }
+    //     });
+    //
+    //     return { repost, isReposted: true };
+    // },
 }

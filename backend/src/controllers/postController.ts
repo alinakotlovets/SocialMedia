@@ -106,3 +106,14 @@ export async function getSearchPosts(req:Request, res:Response){
     const posts =  await  postServices.findPosts(search, userId, cursorId);
     res.status(200).json({posts});
 }
+
+// export async function createRepost(req:Request, res:Response){
+//     const postId = parseId(req.params.postId, "Post id ");
+//     const userId = getUserId(req);
+//     try {
+//         const result = await postServices.toggleRepost(postId, userId);
+//         res.status(200).json(result);
+//     } catch (e: any) {
+//         res.status(400).json({ errors: [e.message] });
+//     }
+// }

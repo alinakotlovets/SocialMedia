@@ -8,6 +8,7 @@ import {formatDate} from "../utils/formatDate.ts";
 import More from "../assets/more.png"
 import liked from "../assets/liked.png"
 import unliked from  "../assets/unliked.png"
+import share from "../assets/share.png";
 import repliesImg from "../assets/replies.png"
 import {Modal} from "./ui/Modal.tsx";
 import {UnregisteredBox} from "./ui/UnregisteredBox.tsx";
@@ -39,6 +40,9 @@ export function PostItem({currentUser, post, onEdit, onDelete, onClick,
     const [like, setLike] = useState<boolean>(post.likes ? post.likes.length>0 : false);
     const [showLoginForm, setShowLoginForm] = useState(false);
     const [isLiking, setIsLiking] = useState(false);
+    const [showShareMenu, setShowShareMenu] = useState(false);
+    const [copied, setCopied] = useState(false);
+    const shareRef = useRef<HTMLDivElement>(null);
     async function handleDelete(){
         const response = await Client(`/posts/${post.id}`, "DELETE");
         if(response.errors) setErrors(response.errors);
@@ -90,6 +94,27 @@ export function PostItem({currentUser, post, onEdit, onDelete, onClick,
     function handleUserClick(e:React.MouseEvent<HTMLElement>){
         e.stopPropagation();
         navigate(`/user/${post.userId}`);
+    }
+
+    useEffect(() => {
+        if (!showShareMenu) return;
+        const handle = (e: MouseEvent) => {
+            if (shareRef.current && !shareRef.current.contains(e.target as Node)) {
+                setShowShareMenu(false);
+            }
+        };
+        document.addEventListener("mousedown", handle);
+        return () => document.removeEventListener("mousedown", handle);
+    }, [showShareMenu]);
+
+    async function handleCopyLink() {
+        const url = `${window.location.origin}/post/${post.id}`;
+        await navigator.clipboard.writeText(url);
+        setCopied(true);
+        setTimeout(() => {
+            setCopied(false);
+            setShowShareMenu(false);
+        }, 500);
     }
 
     const videoRefs = useRef<Map<number, HTMLVideoElement>>(new Map());
@@ -197,6 +222,22 @@ export function PostItem({currentUser, post, onEdit, onDelete, onClick,
                             src={repliesImg} width={15} alt="relpies button icon"/>
                        <p className="text-grey text-s">{repliesCount}</p>
                    </button>
+                   <div className="share-wrapper" ref={shareRef}>
+                       <button className="like-btn button" onClick={(e) => {
+                           e.stopPropagation();
+                           setShowShareMenu(p => !p);
+                       }}>
+                           <img className="unlike-post-img" src={share} width={15} alt="share"/>
+                       </button>
+
+                       {showShareMenu && (
+                           <div className="share-menu" onClick={e => e.stopPropagation()}>
+                               <button className="button more-btn" onClick={handleCopyLink}>
+                                   {copied ? "✓ Copied!" : "Copy link"}
+                               </button>
+                           </div>
+                       )}
+                   </div>
                </div>
            </div>
        </li>

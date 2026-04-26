@@ -8,12 +8,17 @@ export type Post ={
     editedAt: string,
     userId: number,
     parent: Post | null,
-    "parentId": number | null,
-    "_count": {
+    parentId: number | null,
+    _count: {
         "likes": number,
-        "replies": number
-    }
+        "replies": number,
+        "reposts": number
+    },
+    repostOf?: Post,
+    reposts: Likes[],
+    repostOfId: number | null,
     likes:Likes[],
     user: User,
-    media: media[]
+    media: media[],
+    isReposted: boolean
 }

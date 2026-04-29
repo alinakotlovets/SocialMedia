@@ -17,6 +17,7 @@ export function EditUserForm({user, setIsEditUser, onSuccess}:EditUserFormProps)
     })
 
     const [avatar, setAvatar] = useState<File | null>(null);
+    const [errors, setErrors] = useState<string[]>([]);
 
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement>| React.ChangeEvent<HTMLTextAreaElement>){
@@ -27,7 +28,6 @@ export function EditUserForm({user, setIsEditUser, onSuccess}:EditUserFormProps)
         }))
     }
 
-    const [errors, setErrors] = useState<string[]>([]);
     async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>){
         setErrors([]);
         e.preventDefault();
@@ -47,9 +47,9 @@ export function EditUserForm({user, setIsEditUser, onSuccess}:EditUserFormProps)
         }
         if(response.user) {
             onSuccess(response.user);
+            setIsEditUser(false);
         }
 
-        setIsEditUser(false);
     }
 
 

@@ -43,6 +43,19 @@ export function PostItem({currentUser, post, onEdit, onDelete, onClick,
     const [showShareMenu, setShowShareMenu] = useState(false);
     const [copied, setCopied] = useState(false);
     const shareRef = useRef<HTMLDivElement>(null);
+
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        window.addEventListener("resize", handleResize);
+
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
     async function handleDelete(){
         const response = await Client(`/posts/${post.id}`, "DELETE");
         if(response.errors) setErrors(response.errors);
@@ -151,14 +164,23 @@ export function PostItem({currentUser, post, onEdit, onDelete, onClick,
            </div>
            <div className="post-item-content">
                <div className="post-item-top-box">
-                   <div className="post-item-header">
-                       <h4 onClick={handleUserClick}>
-                           {post.user.displayName}</h4>
-                       <p onClick={handleUserClick}
-                          className="text-s text-grey">
-                           @{post.user.username}</p>
-                       <p className="text-s text-grey">{formatDate(post.createdAt) !== formatDate(post.editedAt) ?
-                           `edited ${formatDate(post.editedAt)}` : formatDate(post.createdAt)}</p>
+                   <div>
+                       <div className="post-item-header">
+                           <h4 className="break-word" onClick={handleUserClick}>
+                               {post.user.displayName}</h4>
+                           {!isMobile &&(
+                               <p onClick={handleUserClick}
+                                  className="text-s text-grey">
+                                   @{post.user.username}</p>
+                           )}
+                           <p className="text-s text-grey">{formatDate(post.createdAt) !== formatDate(post.editedAt) ?
+                               `edited ${formatDate(post.editedAt)}` : formatDate(post.createdAt)}</p>
+                       </div>
+                       {isMobile &&(
+                           <p onClick={handleUserClick}
+                              className="text-s text-grey">
+                               @{post.user.username}</p>
+                       )}
                    </div>
                    <div className="more-menu-wrapper" ref={menuRef}>
                        {currentUser && post.userId === currentUser.id &&(

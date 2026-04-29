@@ -58,27 +58,27 @@ export function SearchPage(){
     return(
         <div className="post-box">
             <div className="search-box">
-                <input
-                    className="search-input"
-                    value={inputValue}
-                    placeholder="Search..."
-                    onChange={(e) => setInputValue(e.target.value)}
-                    onKeyDown={(e) => {
-                        if (e.key === "Enter" && inputValue.trim()) {
-                            navigate(`/posts/search?search=${encodeURIComponent(inputValue)}`);
-                        }
-                    }}
-                    type="text"
-                />
-                <img
-                    className="search-icon"
-                    src={SearchIcon}
-                    alt="search"
-                />
+                <div className="search-box">
+                    <div className="search-input-wrapper">
+                        <img className="search-icon" src={SearchIcon} alt="search"/>
+                        <input
+                            className="search-input"
+                            value={inputValue}
+                            placeholder="Search..."
+                            onChange={(e) => setInputValue(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter" && inputValue.trim()) {
+                                    navigate(`/posts/search?search=${encodeURIComponent(inputValue)}`);
+                                }
+                            }}
+                            type="text"
+                        />
+                    </div>
+                </div>
             </div>
-            {errors.length>0 && (
+            {errors.length > 0 && (
                 <ul>
-                    {errors.map((error, index)=>(
+                    {errors.map((error, index) => (
                         <li key={index}>{error}</li>
                     ))}
                 </ul>

@@ -18,6 +18,7 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 10px;
+    gap: 6px;
     width: 100%;
 }
 
@@ -34,6 +35,7 @@
     flex-direction: column;
     align-items: start;
     justify-content: start;
+    word-break: break-word;
 }
 
 .user-page-followers-box{
@@ -70,4 +72,16 @@
 
 .active{
     border-bottom: 1px solid var(--button-bg-active-underline) !important;
+}
+
+@media screen and (max-width: 769.9px){
+    .user-page-header-box{
+        padding: 12px;
+    }
+
+    .user-page-header-box img{
+        width: 70px;
+        height:70px;
+    }
+
 }

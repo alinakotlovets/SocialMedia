@@ -57,3 +57,51 @@
 .theme-menu button:hover {
     background-color: var(--border);
 }
+
+.mobile-menu{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    background-color: var(--bg);
+    border-top: 1px solid var(--border);
+    padding: 10px;
+    z-index: 101;
+}
+
+
+.mobile-menu-btn-box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+@media screen and (max-width: 1199.9px) {
+ .sidebar-btn-box{
+     width: 60px;
+ }
+}
+
+@media screen and (max-width: 769.9px){
+    .sidebar-btn img{
+        filter: var(--filter-black-img);
+        width: 24px;
+    }
+
+    .sidebar-btn-box{
+        bottom: 0;
+        top: unset;
+        left: 0;
+        flex-direction: row;
+        height: auto;
+        width: 100%;
+        background-color: var(--bg);
+        border-top: 1px solid var(--border);
+        padding: 10px;
+        z-index: 101;    }
+}

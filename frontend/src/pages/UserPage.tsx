@@ -273,7 +273,7 @@ export function UserPage(){
                                     </button>)
                                 }
                             </div>
-                            {user.description && (<h4 className="text-s">{user.description}</h4>)}
+                            {user.description && (<h4 className="text-s break-word">{user.description}</h4>)}
                             <div className="user-page-followers-box">
                                 <p  onClick={()=>{
                                     if(!currentUser){

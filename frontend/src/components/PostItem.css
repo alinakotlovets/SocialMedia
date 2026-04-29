@@ -58,6 +58,15 @@
     gap: 10px;
 }
 
+.post-item-header h4 {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
 .post-item-top-box{
     display: flex;
     align-items: center;
@@ -212,4 +221,29 @@
     border-radius: 6px;
     width: 100%;
     text-align: left;
+}
+
+
+@media screen and (max-width: 769.9px){
+    .like-btn{
+        padding: 2px 8px;
+    }
+
+    .post-list-item{
+        padding: 12px;
+    }
+
+    .post-item-img{
+        width: 36px;
+        height: 36px;
+    }
+
+    .post-item-top-box{
+        justify-content: space-between;
+    }
+
+    .share-menu button {
+        padding: 4px 6px;
+    }
+
 }

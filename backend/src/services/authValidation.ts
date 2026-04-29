@@ -27,7 +27,7 @@ export const validateRegister = [
     body("username")
         .trim()
         .notEmpty().withMessage("Username is required")
-        .isLength({min: 2, max: 50}).withMessage("Username should at least 2 symbols and no more than 50 symbols"),
+        .isLength({min: 2, max: 25}).withMessage("Username should at least 2 symbols and no more than 25 symbols"),
     body("email")
         .trim()
         .notEmpty().withMessage("Email is required")

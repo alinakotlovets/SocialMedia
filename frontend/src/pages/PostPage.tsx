@@ -88,12 +88,17 @@ export function PostPage(){
             {isAddEdit && (
                 <Modal onClose={()=>{setIsAddEdit(false); setEditingPost(null)}} closeOnOverlayClick={true}>
                     <AddEditPostForm mode={editingPost ? "edit" : "reply"}
-                                     post={post}
+                                     post={editingPost ?? post}
                                      currentUser={currentUser}
                                      onSuccess={(updatedPost) => {
                                          {
                                              if (editingPost) {
-                                                 setPost(updatedPost);
+                                                 const isCurrentPost = post && post.id === editingPost.id;
+                                                 if (isCurrentPost) {
+                                                     setPost(updatedPost);
+                                                 } else {
+                                                     setReplies(replies.map(r => r.id === updatedPost.id ? updatedPost : r));
+                                                 }
                                              } else {
                                                  setReplies([...replies, updatedPost]);
                                                  setRepliesCount((prev:number)=> prev + 1);

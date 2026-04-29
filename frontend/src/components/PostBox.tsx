@@ -71,9 +71,9 @@ export function PostBox({currentUser}:PostBoxProps){
                                      currentUser={currentUser}
                                      onSuccess={(newPost) => {
                                          if (editingPost) {
-                                             setActivePosts(activePosts.map(p => p.id === newPost.id ? newPost : p));
+                                             setActivePosts(posts.map(p => p.id === newPost.id ? newPost : p));
                                          } else {
-                                             setActivePosts([newPost, ...activePosts]);
+                                             setPosts([newPost, ...posts]);
                                          }
                                          setEditingPost(null);
                                      }}

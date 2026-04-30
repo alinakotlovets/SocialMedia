@@ -23,6 +23,7 @@ export const userServices = {
             include: {
                 post: {
                     include: {
+                        media: {},
                         user: {
                             select: { id: true, username: true, displayName: true, avatar: true }
                         },
@@ -50,6 +51,7 @@ export const userServices = {
                 },
                 parent: {
                     include: {
+                        media: {},
                         user: {
                             select: { id: true, username: true, displayName: true, avatar: true }
                         },

@@ -166,9 +166,9 @@ export function PostItem({currentUser, post, onEdit, onDelete, onClick,
            </div>
            <div className="post-item-content">
                <div className="post-item-top-box">
-                   <div>
+                   <div className="post-item-header-wrapper">
                        <div className="post-item-header">
-                           <h4 className="break-word" onClick={handleUserClick}>
+                           <h4 onClick={handleUserClick}>
                                {post.user.displayName}</h4>
                            {!isMobile &&(
                                <p onClick={handleUserClick}

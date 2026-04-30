@@ -16,6 +16,24 @@
     align-items: start;
     justify-content: center;
     text-align: start;
+    min-width: 0;
+    flex: 1;
+}
+
+.user-display-name{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex-shrink: 1;
+    min-width: 0;
+}
+
+.user-header-box{
+    min-width: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .user-item-info-box img{

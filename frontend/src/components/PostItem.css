@@ -56,14 +56,34 @@
     align-items: start;
     justify-content: start;
     gap: 10px;
+    min-width: 0;
+    overflow: hidden;
+    max-width: 510px;
+}
+
+.post-item-header-wrapper {
+    min-width: 0;
+    flex: 1;
+}
+
+.post-item-header-wrapper p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 150px;
 }
 
 .post-item-header h4 {
-    flex: 1;
+    flex-shrink: 1;
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.post-item-header p {
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 
@@ -238,9 +258,19 @@
         height: 36px;
     }
 
-    .post-item-top-box{
-        justify-content: space-between;
+    .post-item-header {
+        max-width: 100%;
     }
+
+    .post-item-header h4 {
+        max-width: 155px;
+    }
+
+    .post-item-header-wrapper {
+        min-width: 0;
+        overflow: hidden;
+    }
+
 
     .share-menu button {
         padding: 4px 6px;

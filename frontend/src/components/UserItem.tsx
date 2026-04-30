@@ -33,8 +33,8 @@ export function UserItem({user, handleUserClick}:UserItemParams){
             <div className="user-item-info-box">
                 <img onClick={()=>navigate(`/user/${user.id}`)}
                 src={user.avatar || defaultAvatar} alt={user.username + " avatar image"}/>
-                <div>
-                    <h4>{user.displayName}</h4>
+                <div className="user-header-box">
+                    <h4 className="user-display-name">{user.displayName}</h4>
                     <p className="text-s text-grey">@{user.username}</p>
                 </div>
             </div>

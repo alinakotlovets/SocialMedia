@@ -157,6 +157,12 @@ textarea {
 }
 
 
+button:focus:not(:focus-visible) {
+  outline: none;
+  background-color: unset;
+  box-shadow: none;
+}
+
 .button {
   border-radius: 999px;
   font-weight: 600;
@@ -208,6 +214,13 @@ textarea {
   align-items: center;
   justify-content: center;
   min-height: 100px;
+}
+
+.center-box{
+  height: calc(100vh - 50px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .post-text {

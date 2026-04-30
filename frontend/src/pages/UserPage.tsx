@@ -18,9 +18,10 @@ import {useInfiniteScrollOnScroll} from "../hooks/useInfiniteScroll.ts";
 
 export function UserPage(){
     const {userId} = useParams();
-    const [loading, setLoading] = useState <{user:boolean, posts:boolean, likedPosts:boolean,
+    const [isInitialLoading, setIsInitialLoading] = useState(false);
+    const [loading, setLoading] = useState <{posts:boolean, likedPosts:boolean,
     replies:boolean}>
-    ({user:false, posts:false, likedPosts: false, replies:false});
+    ({posts:false, likedPosts: false, replies:false});
     const [errors, setErrors] = useState<string[]>([]);
     const [user, setUser] = useState<User | null>(null);
     const [likedPosts, setLikedPosts] = useState<Post[]>([]);
@@ -70,7 +71,8 @@ export function UserPage(){
         setLoadedFollowers(false);
         setLoadedFollowing(false);
         async function fetchAll() {
-            setLoading({ user: true, posts: true, likedPosts: true, replies: true });
+            setIsInitialLoading(true);
+            setLoading({ posts: true, likedPosts: true, replies: true });
 
             const [userRes, postsRes, likedRes, repliesRes] = await Promise.all([
                 Client(`/user/${userId}`, "GET"),
@@ -92,18 +94,19 @@ export function UserPage(){
                 .flatMap(r => r.errors || []);
             if (allErrors.length) setErrors(allErrors);
 
-            setLoading({ user: false, posts: false, likedPosts: false, replies: false });
+            setLoading({ posts: false, likedPosts: false, replies: false });
+            setIsInitialLoading(false);
         }
         fetchAll();
     }, [userId]);
 
     const tabContent = {
-        posts:   { data: posts,      isLoading: loading.posts,      isReply:false},
-        liked:   { data: likedPosts, isLoading: loading.likedPosts, isReply:false},
-        replies: { data: replies,    isLoading: loading.replies,    isReply:true },
+        posts:   { data: posts, isReply:false},
+        liked:   { data: likedPosts, isReply:false},
+        replies: { data: replies, isReply:true },
     };
 
-    const { data, isLoading, isReply} = tabContent[chosenPosts];
+    const { data, isReply} = tabContent[chosenPosts];
 
     async function handleFollowClick() {
         const response = await Client(`/follow/${userId}`, "POST");
@@ -237,8 +240,8 @@ export function UserPage(){
             )}
 
                 <div>
-                    {loading.user && (
-                        <div>
+                    {isInitialLoading && (
+                        <div className="center-box">
                             <h3>Loading...</h3>
                         </div>
                 )}
@@ -312,9 +315,8 @@ export function UserPage(){
                     </>
                 )}
                 </div>
-                    {isLoading
-                        ? <h3>Loading...</h3>
-                        :  <PostList
+                    {!isInitialLoading &&
+                          <PostList
                                 posts={data}
                                 currentUser={currentUser}
                                 setActiveVideoId={setActiveVideoId}

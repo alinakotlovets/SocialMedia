@@ -75,7 +75,9 @@ export function PostsSearchPage() {
 
             {isLoading && <p className="text-s text-grey">Loading...</p>}
             {!isLoading && posts.length === 0 && (
-                <p className="text-s text-grey">Posts not found</p>
+                <div className="center-box">
+                    <p className="text-s text-grey">Posts not found</p>
+                </div>
             )}
             
             {!isLoading && posts.length>0 &&(

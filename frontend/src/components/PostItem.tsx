@@ -136,8 +136,6 @@ export function PostItem({currentUser, post, onEdit, onDelete, onClick,
         videoRefs.current.forEach((videoEl, mediaId) => {
             if (mediaId !== activeVideoId) {
                 videoEl.pause();
-            } else {
-                videoEl.play().catch(() => {});
             }
         });
     }, [activeVideoId]);

@@ -163,6 +163,10 @@ button:focus:not(:focus-visible) {
   box-shadow: none;
 }
 
+button{
+  color: var(--color);
+}
+
 .button {
   border-radius: 999px;
   font-weight: 600;

@@ -133,6 +133,8 @@ export function PostItem({currentUser, post, onEdit, onDelete, onClick,
     const videoRefs = useRef<Map<number, HTMLVideoElement>>(new Map());
 
     useEffect(() => {
+        if (activeVideoId === null) return;
+
         videoRefs.current.forEach((videoEl, mediaId) => {
             if (mediaId !== activeVideoId) {
                 videoEl.pause();
@@ -217,9 +219,13 @@ export function PostItem({currentUser, post, onEdit, onDelete, onClick,
                            )}
                            {m.type === "VIDEO" && (
                                <video  ref={(el) => {
-                                       if (el) videoRefs.current.set(m.id, el);
-                                       else videoRefs.current.delete(m.id);
-                                       }}
+                                   if (el) {
+                                        videoRefs.current.set(m.id, el);
+                                        el.onplay = () => setActiveVideoId(m.id);  // коли юзер натискає play
+                                    } else {
+                                           videoRefs.current.delete(m.id);
+                                    }
+                                    }}
                                        onClick={(e) => {
                                            setActiveVideoId(m.id);
                                            e.stopPropagation();

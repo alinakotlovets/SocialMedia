@@ -15,7 +15,7 @@ export default async function Client( link: string,
 
         if(signal)options.signal = signal;
 
-        const baseUrl = "http://localhost:3000";
+        const baseUrl = "https://socialmedia-36zm.onrender.com";
         const response = await fetch(`${baseUrl}${link}`, options);
 
         return response.json();

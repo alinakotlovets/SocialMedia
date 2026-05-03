@@ -143,6 +143,11 @@ textarea {
   font-size: 15px;
 }
 
+.active{
+  border-bottom: 1px solid var(--button-bg-active-underline) !important;
+}
+
+
 .button-sm {
   padding: 5px 10px;
 }

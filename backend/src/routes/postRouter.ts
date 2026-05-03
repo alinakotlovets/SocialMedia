@@ -22,7 +22,6 @@ postRouter.get("/following", verifyToken, getFollowingPosts);
 postRouter.get("/search", verifyToken, getSearchPosts);
 postRouter.delete("/:postId", verifyToken, deletePost);
 postRouter.put("/:postId", upload.array("media", 2), validateFiles, verifyToken, postValidation, validateFields, editPost);
-// postRouter.post("/repost/:postId",  verifyToken, createRepost);
 postRouter.post("/:postId/replies", upload.array("media", 2), validateFiles, verifyToken, postValidation, validateFields, addPost);
 postRouter.post("/", upload.array("media", 2), validateFiles, verifyToken, postValidation, validateFields, addPost);
 postRouter.get("/:postId/replies", optionalAuth, getPostReplies);

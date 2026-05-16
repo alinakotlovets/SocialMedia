@@ -141,6 +141,31 @@ export function UserPage(){
         setIsAddEditPost(true);
     }
 
+    function handleLike(postId: number, liked: boolean) {
+        const updatePost = (p: Post) => {
+            if (p.id !== postId) return p;
+            return {
+                ...p,
+                likes: liked ? [{ id: postId }] : [],
+                _count: { ...p._count, likes: p._count.likes + (liked ? 1 : -1) }
+            };
+        };
+
+        setPosts(posts.map(updatePost));
+        setReplies(prev => prev.map(updatePost));
+
+        setLikedPosts(prev => {
+            const exists = prev.some(p => p.id === postId);
+            if (liked && !exists) {
+                const source = posts.find(p => p.id === postId)
+                    ?? replies.find(p => p.id === postId);
+                return source ? [source, ...prev] : prev;
+            }
+            if (!liked) return prev.filter(p => p.id !== postId);
+            return prev;
+        });
+    }
+
     function handleDelete(id: number) {
         setPosts(posts.filter(p => p.id !== id));
         setLikedPosts(likedPosts.filter(p => p.id !== id));
@@ -324,7 +349,9 @@ export function UserPage(){
                                 isReply={isReply}
                                 navigate={navigate}
                                 onEdit={handleEdit}
-                                onDelete={handleDelete}/>
+                                onDelete={handleDelete}
+                                onLike={handleLike}
+                          />
 
                     }
 

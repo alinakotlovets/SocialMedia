@@ -10,6 +10,11 @@
     cursor: pointer;
 }
 
+.post-list-item,
+.button {
+    -webkit-tap-highlight-color: transparent;
+}
+
 .post-list-item.has-thread {
     border-bottom: none;
 }

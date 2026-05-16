@@ -3,7 +3,7 @@ import type {User} from "../types/User.ts";
 import {PostItem} from "./PostItem.tsx";
 import {ParentPost} from "./ParentPost.tsx";
 
-export function PostList({ posts, currentUser, navigate, isReply, onEdit, onDelete, activeVideoId, setActiveVideoId}: {
+export function PostList({ posts, currentUser, navigate, isReply, onEdit, onDelete, activeVideoId, setActiveVideoId, onLike}: {
     posts: Post[],
     currentUser: User | null,
     isReply: boolean,
@@ -11,7 +11,9 @@ export function PostList({ posts, currentUser, navigate, isReply, onEdit, onDele
     setActiveVideoId: (value: number)=>void,
     activeVideoId: number | null,
     onDelete: (id: number) => void,
-    navigate: (path: string) => void }) {
+    navigate: (path: string) => void,
+    onLike?: (postId: number, liked: boolean) => void
+}) {
     if (posts.length === 0) return <div className="no-posts"><h3>No posts</h3></div>;
 
     return (
@@ -27,6 +29,7 @@ export function PostList({ posts, currentUser, navigate, isReply, onEdit, onDele
                     repliesCount={post._count.replies}
                     onClick={() => navigate(`/post/${post.id}`)}
                     onDelete={(id) => onDelete(id)}
+                    onLike={onLike}
                 />
             ))}
 

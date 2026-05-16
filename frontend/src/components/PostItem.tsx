@@ -26,12 +26,13 @@ type PostItemProps = {
     sonHasThread?: boolean,
     repliesCount?:number,
     setActiveVideoId: (value: number) => void,
-    activeVideoId: number | null
+    activeVideoId: number | null,
+    onLike?: (postId: number, liked: boolean) => void;
 }
 
 export function PostItem({currentUser, post, onEdit, onDelete, onClick,
                              hasThread, repliesCount, setActiveVideoId, activeVideoId,
-                             sonHasThread}:PostItemProps){
+                             sonHasThread, onLike}:PostItemProps){
 
     const menuRef = useRef<HTMLDivElement>(null);
     const [errors, setErrors] = useState<string[]>([]);
@@ -64,29 +65,38 @@ export function PostItem({currentUser, post, onEdit, onDelete, onClick,
 
     const {posts, setPosts} = usePosts();
 
-    async function handleLike(){
+    async function handleLike() {
         if (isLiking) return;
-        setErrors([]);
-        if(!currentUser){
-            setShowLoginForm(true);
-            return;
+        if (!currentUser) { setShowLoginForm(true); return; }
+
+        const prevLike = like;
+        const prevCount = likeCount;
+
+        setLike(!like);
+        setLikeCount(like ? likeCount - 1 : likeCount + 1);
+        if (!onLike) {
+            setPosts(posts.map(p => p.id === post.id
+                ? { ...p,
+                    likes: like ? [] : [{ id: post.id }],
+                    _count: { ...p._count, likes: p._count.likes + (like ? -1 : 1) }
+                }
+                : p
+            ));
         }
-        setIsLiking(true)
-        const response = await Client(`/like/${post.id}`, "POST");
-        if(response.errors) setErrors(response.errors);
-        if(response.message){
-          if(like){
-              setLikeCount(likeCount-1);
-              setPosts(posts.map(p => p.id === post.id ? { ...p, likes: [],
-                  _count: { ...p._count, likes: p._count.likes - 1 } } : p));
-          } else {
-              setLikeCount(likeCount+1);
-              setPosts(posts.map(p => p.id === post.id ? { ...p, likes: [{ id: post.id }],
-                      _count: { ...p._count, likes: p._count.likes + 1 } } : p));
-          }
-          setLike(!like);
+
+        setIsLiking(true);
+        try {
+            const response = await Client(`/like/${post.id}`, "POST");
+            if (response.errors) {
+                setLike(prevLike);
+                setLikeCount(prevCount);
+                setErrors(response.errors);
+            } else {
+                onLike?.(post.id, !prevLike);
+            }
+        } finally {
+            setIsLiking(false);
         }
-        setIsLiking(false);
     }
 
 

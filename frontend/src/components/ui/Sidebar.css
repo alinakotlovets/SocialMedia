@@ -7,7 +7,7 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
-    height: 100vh;
+    height: 100dvh;
     width: 75px;
 }
 
@@ -103,5 +103,11 @@
         background-color: var(--bg);
         border-top: 1px solid var(--border);
         padding: 10px;
-        z-index: 101;    }
+        z-index: 101;}
+
+
+    .theme-menu{
+        top: -95%;
+        left: -65px;
+    }
 }

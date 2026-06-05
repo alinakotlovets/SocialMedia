@@ -251,7 +251,26 @@ export function UserPage(){
             {isEditUser &&(
                 <Modal onClose={()=>setIsEditUser(false)} closeOnOverlayClick={false}>
                     <EditUserForm user={user} setIsEditUser={setIsEditUser}
-                                  onSuccess={(user:User)=>setUser(user)}/>
+                                  onSuccess={(updatedUser: User) => {
+                                      setUser(updatedUser);
+
+                                      const updatePostUser = (p: Post) => ({
+                                          ...p,
+                                          user: {
+                                              ...p.user,
+                                              displayName: updatedUser.displayName,
+                                              avatar: updatedUser.avatar,
+                                              username: updatedUser.username,
+                                          }
+                                      });
+
+                                      setPosts(posts.map(updatePostUser));
+                                      setReplies(prev => prev.map(updatePostUser));
+
+                                      setLikedPosts(prev => prev.map(p =>
+                                          p.user.id === updatedUser.id ? updatePostUser(p) : p
+                                      ));
+                                  }}/>
                 </Modal>
             )}
 

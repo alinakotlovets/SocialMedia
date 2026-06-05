@@ -241,7 +241,7 @@ export function PostItem({currentUser, post, onEdit, onDelete, onClick,
                                            e.stopPropagation();
                                        }}
                                        src={m.url}
-                                       poster={m.url.replace('/upload/', '/upload/so_1,w_800,q_auto,f_jpg/')
+                                       poster={m.url.replace('/upload/', '/upload/so_0.1,w_800,q_auto,f_jpg/')
                                            .replace('.mp4', '.jpg')}
                                        controls></video>
                            )}

@@ -11,15 +11,15 @@ export function MobileMenu(){
         <>
             {!currentUser && !isLoading &&(
                 <div className="mobile-menu">
-                    <button onClick={()=>navigate("/")}
-                        className="button sidebar-btn">
-                        <img src={homeIcon} alt="home button icon"/>
-                    </button>
                     <div className="mobile-menu-btn-box">
                         <button onClick={()=>navigate("/login")}
-                            className="button button-md button-primary">Login</button>
+                            className="button button-20px button-primary">Login</button>
+                        <button onClick={()=>navigate("/")}
+                                className="sidebar-btn">
+                            <img src={homeIcon} alt="home button icon"/>
+                        </button>
                         <button onClick={()=>navigate("/register")}
-                            className="button button-md button-outline">Register</button>
+                            className="button button-20px button-outline">Register</button>
                     </div>
                 </div>
             )}

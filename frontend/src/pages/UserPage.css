@@ -62,6 +62,7 @@
     height: 100%;
     border: none;
     transition: background 200ms ease-in-out;
+    color: var(--button-bg-active-underline);
 }
 
 

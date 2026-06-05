@@ -73,7 +73,7 @@ export function PostsSearchPage() {
                 </ul>
             )}
 
-            {isLoading && <p className="text-s text-grey">Loading...</p>}
+            {isLoading && <div className="no-posts"><p className="text-s text-grey">Loading...</p></div>}
             {!isLoading && posts.length === 0 && (
                 <div className="center-box">
                     <p className="text-s text-grey">Posts not found</p>

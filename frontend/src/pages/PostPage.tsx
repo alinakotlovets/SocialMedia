@@ -29,9 +29,8 @@ export function PostPage(){
     const navigate = useNavigate();
 
     useEffect(() => {
-
-        setLoading((prev)=>({...prev, post: true}));
         async function getPost(){
+            setLoading((prev) => ({ ...prev, post: true }));
             const response =  await Client(`/posts/${postId}`, "GET");
             if(response.errors) setErrors(response.errors);
             if(response.post) {
@@ -44,9 +43,9 @@ export function PostPage(){
                     setParentPost(null);
                 }
             }
+            setLoading((prev) => ({ ...prev, post: false }));
         }
         getPost();
-        setLoading((prev)=>({...prev, post:false}));
     }, [postId]);
 
 
@@ -75,7 +74,11 @@ export function PostPage(){
 
     return(
         <div className="post-box">
-            {loading.post &&(<h3>Loading...</h3>)}
+            {loading.post &&(
+                <div className="no-posts">
+                    <h4>Loading...</h4>
+                </div>
+            )}
 
             {errors.length > 0 && (
                 <ul className="add-edit-errors">
@@ -145,13 +148,12 @@ export function PostPage(){
 
             {loading.replies && (
                 <div className="no-posts">
-                    <h3>Loading...</h3>
+                    <p>Loading...</p>
                 </div>
             )}
-            {loading.replies === false && replies.length === 0 &&(
-                <div className="no-posts">
-                    <h4>There no comment yet</h4>
-                </div>
+
+            {loading.replies === false && replies.length === 0 && post && (
+                <div className="no-posts"><h4>There no comment yet</h4></div>
             )}
             {loading.replies === false && replies.length>0 && replies.map((r)=>(
                    <PostItem currentUser={currentUser}

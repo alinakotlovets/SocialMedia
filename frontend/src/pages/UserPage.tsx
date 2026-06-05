@@ -36,6 +36,7 @@ export function UserPage(){
         useState<null | "followers" | "following">(null)
     const [loadedFollowers, setLoadedFollowers] = useState(false);
     const [loadedFollowing, setLoadedFollowing] = useState(false);
+    const [loadingFollows, setLoadingFollows] = useState(false);
     const [isEditUser,setIsEditUser] = useState<boolean>(false);
     const [editingPost, setEditingPost] = useState<Post | null>(null);
     const [isAddEditPost, setIsAddEditPost] = useState(false);
@@ -122,7 +123,7 @@ export function UserPage(){
         setFollowersOrFollowing(type);
         if(type === "followers" && loadedFollowers) return;
         if(type ==="following" && loadedFollowing) return;
-        setFollowersOrFollowing(type);
+        setLoadingFollows(true);
 
         const response = await Client(`/follow/${userId}/${type}`, "GET");
         if(response.followers){
@@ -134,6 +135,7 @@ export function UserPage(){
             setFollowing(response.following)
             setLoadedFollowing(true);
         }
+        setLoadingFollows(false);
     }
 
     function handleEdit(post: Post) {
@@ -234,6 +236,7 @@ export function UserPage(){
                                      onTabChange={(type)=>getFollowersOrFollowing(type)}
                                      setFollowers={setFollowers}
                                      setFollowing={setFollowing}
+                                     loading={loadingFollows}
                                      userId={userId!}/>
                 </Modal>
             )}

@@ -16,6 +16,7 @@ type PostBoxProps = {
 export function PostBox({currentUser}:PostBoxProps){
     const [isAddEditPost, setIsAddEditPost] =useState(false);
     const [editingPost, setEditingPost] = useState<Post | null>(null);
+    const [loading, setLoading] = useState<boolean | null>(null);
     const [errors, setErrors] = useState<{posts: string[], following:string[]}>({posts:[], following:[]});
     const [following, setFollowing] = useState<Post[]>([]);
     const [feedType, setFeedType] = useState<"posts" | "following">("posts");
@@ -38,8 +39,9 @@ export function PostBox({currentUser}:PostBoxProps){
 
     useEffect(() => {
         setActiveVideoId(null);
-        getPosts(null);
-        getFollowingPosts(null);
+        setLoading(true);
+        Promise.all([getPosts(null), getFollowingPosts(null)])
+            .finally(() => setLoading(false));
     }, []);
 
     const activePosts = feedType === "posts" ? posts : following;
@@ -113,6 +115,11 @@ export function PostBox({currentUser}:PostBoxProps){
                     </ul>
                 )}
             </div>
+
+                {loading && <div className="center-box"><p className="text-s text-grey">Loading...</p></div>}
+                {!loading && activePosts.length === 0 && (
+                    <div className="center-box"><p className="text-s text-grey">Posts not found</p></div>
+                )}
         </div>
         </div>
     )

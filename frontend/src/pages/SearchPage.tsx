@@ -102,9 +102,9 @@ export function SearchPage(){
                     ))}
                 </ul>
             )}
-            {loading && <p className="text-s text-grey">Loading...</p>}
+            {loading && <div className="no-posts"><p className="text-s text-grey">Loading...</p></div>}
             {!loading && inputValue.trim() && users.length === 0 && (
-                <p className="text-s text-grey">Users not found</p>
+                <div className="no-posts"><p className="text-s text-grey">Users not found</p></div>
             )}
         </div>
     );

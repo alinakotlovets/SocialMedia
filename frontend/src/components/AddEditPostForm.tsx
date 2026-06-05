@@ -79,7 +79,7 @@ export function AddEditPostForm({mode, post, currentUser, onSuccess,
         <form className="add-edit-form" encType="multipart/form-data"  onSubmit={handleAddEditPost}>
             {isLoading &&(
                 <div className="loading-post">
-                    <h4>Loading...</h4>
+                    <p className="text-s text-grey">Loading...</p>
                 </div>
             )}
             <div className="add-edit-form-body">

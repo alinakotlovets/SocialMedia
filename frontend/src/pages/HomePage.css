@@ -18,4 +18,7 @@
     border: 1px solid var(--border);
     border-radius: 16px;
     text-align: start;
+    position: sticky;
+    top: 20px;
+    align-self: flex-start;
 }

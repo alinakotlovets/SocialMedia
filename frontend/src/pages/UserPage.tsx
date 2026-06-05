@@ -316,7 +316,13 @@ export function UserPage(){
                                     ? (<button onClick={()=>setIsEditUser(true)}
                                         className="button button-primary button-sm">Edit</button>)
                                     : (<button
-                                        onClick={handleFollowClick}
+                                        onClick={()=>{
+                                            if(!currentUser){
+                                                setIsUnregisterBox(true)
+                                            } else {
+                                                handleFollowClick();
+                                            }
+                                        }}
                                         className={"button button-sm " +
                                             (isFollow ? "button-outline" : "button-primary")}>
                                         {isFollow ? "Followed": "Follow"}

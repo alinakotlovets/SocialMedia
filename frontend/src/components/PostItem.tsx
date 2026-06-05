@@ -231,7 +231,7 @@ export function PostItem({currentUser, post, onEdit, onDelete, onClick,
                                <video  ref={(el) => {
                                    if (el) {
                                         videoRefs.current.set(m.id, el);
-                                        el.onplay = () => setActiveVideoId(m.id);  // коли юзер натискає play
+                                        el.onplay = () => setActiveVideoId(m.id);
                                     } else {
                                            videoRefs.current.delete(m.id);
                                     }
@@ -240,7 +240,10 @@ export function PostItem({currentUser, post, onEdit, onDelete, onClick,
                                            setActiveVideoId(m.id);
                                            e.stopPropagation();
                                        }}
-                                       src={m.url} controls></video>
+                                       src={m.url}
+                                       poster={m.url.replace('/upload/', '/upload/so_1,w_800,q_auto,f_jpg/')
+                                           .replace('.mp4', '.jpg')}
+                                       controls></video>
                            )}
                        </li>
                        )}

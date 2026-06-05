@@ -15,7 +15,7 @@ export default async function Client( link: string,
 
         if(signal)options.signal = signal;
 
-        const mode = "prod";
+        const mode = "dev";
         // @ts-ignore
         const baseUrl = mode === "dev" ? "http://localhost:3000" : "https://socialmedia-36zm.onrender.com";
 

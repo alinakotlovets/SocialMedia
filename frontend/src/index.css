@@ -164,13 +164,12 @@ textarea {
 
 button:focus:not(:focus-visible) {
   outline: none;
-  background-color: unset;
   box-shadow: none;
 }
 
-button{
-  color: var(--color);
-}
+/*button{*/
+/*  color: var(--color);*/
+/*}*/
 
 .button {
   border-radius: 999px;
@@ -190,6 +189,8 @@ button{
   border: 1px solid var(--border);
   color: var(--text-h);
 }
+
+
 
 .button-outline:focus,
 .button-outline:hover{

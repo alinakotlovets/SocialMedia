@@ -43,3 +43,7 @@
     border-radius: 100px;
 }
 
+.user-item button:active {
+    opacity: 1 !important;
+    visibility: visible !important;
+}

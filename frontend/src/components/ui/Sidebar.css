@@ -22,6 +22,10 @@
     background: var(--outline-button-bg-active);
 }
 
+.sidebar-btn:focus:not(:focus-visible){
+    background-color: unset;
+}
+
 .sidebar-btn img{
     filter: var(--filter-black-img);
     width: 30px;

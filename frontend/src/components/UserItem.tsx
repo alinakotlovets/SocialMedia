@@ -16,10 +16,11 @@ export function UserItem({user, handleUserClick}:UserItemParams){
     const {currentUser} = useCurrentUserContext();
     const navigate = useNavigate();
 
-    async function handleFollowClick() {
+    async function handleFollowClick(e: React.MouseEvent) {
+        e.stopPropagation();
         const response = await Client(`/follow/${user.id}`, "POST");
         if(response.message){
-            setIsFollow(!isFollow);
+            setIsFollow(prev => !prev);
         }
     }
 
@@ -31,8 +32,8 @@ export function UserItem({user, handleUserClick}:UserItemParams){
     return(
         <li className="user-item" onClick={userClick}>
             <div className="user-item-info-box">
-                <img onClick={()=>navigate(`/user/${user.id}`)}
-                src={user.avatar || defaultAvatar} alt={user.username + " avatar image"}/>
+                <img src={user.avatar || defaultAvatar}
+                     alt={user.username + " avatar image"}/>
                 <div className="user-header-box">
                     <h4 className="user-display-name">{user.displayName}</h4>
                     <p className="text-s text-grey">@{user.username}</p>
@@ -40,10 +41,7 @@ export function UserItem({user, handleUserClick}:UserItemParams){
             </div>
             {(currentUser && currentUser.id !== user.id) && (
                 <button
-                onClick={(e)=>{
-                    e.stopPropagation();
-                    handleFollowClick()
-                }}
+                onClick={handleFollowClick}
                 className={"button button-sm " +
                     (isFollow ? "button-outline" : "button-primary")}>
                 {isFollow ? "Followed": "Follow"}

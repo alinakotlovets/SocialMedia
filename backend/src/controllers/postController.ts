@@ -68,7 +68,8 @@ export async function getUserPost(req:Request, res:Response){
     const userId = parseId(req.params.userId, "User id ");
     const user = await userServices.getUserById(userId, null);
     if(!user) throw new AppError(404, "User with this id not found");
-    const posts = await postServices.getPostsByUserId(userId, cursorId);
+    const currentUser = parseOptionalId(req.user?.id, "User id ");
+    const posts = await postServices.getPostsByUserId(userId, cursorId, currentUser);
     res.status(200).json({posts});
 }
 

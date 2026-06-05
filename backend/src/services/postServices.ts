@@ -81,7 +81,7 @@ export const postServices = {
             },
             take: 20
         }),
-    getPostsByUserId: async(userId:number, cursorId:number|null):Promise<PostWithUser[]>=>
+    getPostsByUserId: async(userId:number, cursorId:number|null, currentUserId: number | null):Promise<PostWithUser[]>=>
         prisma.post.findMany({
             where:{
                 parentId: null,
@@ -94,10 +94,10 @@ export const postServices = {
                     {select:
                             {id:true, username: true, displayName:true, avatar:true}
                     },
-                likes: {
-                    where: { userId },
+                likes: currentUserId ? {
+                    where: { userId: currentUserId },
                     select: { id: true }
-                },
+                } : false,
                 _count: { select: { replies: true, likes: true } }
             },
             orderBy: {

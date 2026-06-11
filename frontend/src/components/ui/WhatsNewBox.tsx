@@ -1,5 +1,5 @@
-import type {User} from "../types/User.ts";
-import DefaultAvatar from "../assets/defaultAvatar.png"
+import type {User} from "../../types/User.ts";
+import DefaultAvatar from "../../assets/defaultAvatar.png"
 import {useNavigate} from "react-router-dom";
 
 type WhatsNewBoxProps ={

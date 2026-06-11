@@ -1,8 +1,8 @@
-import defaultAvatar from "../assets/defaultAvatar.png";
-import type {User} from "../types/User.ts";
+import defaultAvatar from "../../assets/defaultAvatar.png";
+import type {User} from "../../types/User.ts";
 import {useState} from "react";
-import Client from "../api/client.ts";
-import {useCurrentUserContext} from "../context/CurrentUserContext.tsx";
+import Client from "../../api/client.ts";
+import {useCurrentUserContext} from "../../context/CurrentUserContext.tsx";
 import {useNavigate} from "react-router-dom";
 import "./UserItem.css"
 

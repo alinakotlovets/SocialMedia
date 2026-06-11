@@ -1,20 +1,20 @@
-import type {User} from "../types/User.ts";
-import type {Post} from "../types/Post.ts";
-import defaultAvatar from "../assets/defaultAvatar.png";
+import type {User} from "../../types/User.ts";
+import type {Post} from "../../types/Post.ts";
+import defaultAvatar from "../../assets/defaultAvatar.png";
 import "./PostItem.css";
-import Client from "../api/client.ts";
+import Client from "../../api/client.ts";
 import {useRef, useState, useEffect} from "react";
-import {formatDate} from "../utils/formatDate.ts";
-import More from "../assets/more.png"
-import liked from "../assets/liked.png"
-import unliked from  "../assets/unliked.png"
-import share from "../assets/share.png";
-import repliesImg from "../assets/replies.png"
-import {Modal} from "./ui/Modal.tsx";
-import {UnregisteredBox} from "./ui/UnregisteredBox.tsx";
+import {formatDate} from "../../utils/formatDate.ts";
+import More from "../../assets/more.png"
+import liked from "../../assets/liked.png"
+import unliked from "../../assets/unliked.png"
+import share from "../../assets/share.png";
+import repliesImg from "../../assets/replies.png"
+import {Modal} from "../ui/Modal.tsx";
+import {UnregisteredBox} from "../ui/UnregisteredBox.tsx";
 import {useNavigate} from "react-router-dom";
 import * as React from "react";
-import {usePosts} from "../context/PostsContext.tsx";
+import {usePosts} from "../../context/PostsContext.tsx";
 
 type PostItemProps = {
     currentUser: User | null,

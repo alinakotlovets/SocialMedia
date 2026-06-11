@@ -2,10 +2,10 @@ import { useSearchParams } from "react-router-dom";
 import {useEffect, useState} from "react";
 import Client from "../api/client.ts";
 import type {Post} from "../types/Post.ts";
-import {PostItem} from "../components/PostItem.tsx";
+import {PostItem} from "../components/postItems/PostItem.tsx";
 import {useCurrentUserContext} from "../context/CurrentUserContext.tsx";
 import {Modal} from "../components/ui/Modal.tsx";
-import {AddEditPostForm} from "../components/AddEditPostForm.tsx";
+import {AddEditPostForm} from "../components/postItems/AddEditPostForm.tsx";
 import {usePosts} from "../context/PostsContext.tsx";
 import {useInfiniteScrollOnScroll} from "../hooks/useInfiniteScroll.ts";
 

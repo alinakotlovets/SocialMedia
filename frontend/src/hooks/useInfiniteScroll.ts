@@ -32,8 +32,6 @@ export function useInfiniteScrollOnScroll({
 
     useEffect(() => {
         function onScroll() {
-            if (isFetchingRef.current) return;
-            if (!hasMoreRef.current) return;
 
             if (isFetchingRef.current) return;
             if (!hasMoreRef.current) return;

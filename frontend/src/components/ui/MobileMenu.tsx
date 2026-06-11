@@ -1,7 +1,7 @@
-import {useCurrentUserContext} from "../context/CurrentUserContext.tsx";
-import homeIcon from "../assets/home.png"
-import "../components/ui/Sidebar.css";
-import {Sidebar} from "./ui/Sidebar.tsx";
+import {useCurrentUserContext} from "../../context/CurrentUserContext.tsx";
+import homeIcon from "../../assets/home.png"
+import "./Sidebar.css";
+import {Sidebar} from "./Sidebar.tsx";
 import {useNavigate} from "react-router-dom";
 
 export function MobileMenu(){

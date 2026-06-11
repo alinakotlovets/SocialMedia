@@ -6,11 +6,11 @@ import defaultAvatar from "../assets/defaultAvatar.png"
 import type {Post} from "../types/Post.ts";
 import {useCurrentUserContext} from "../context/CurrentUserContext.tsx";
 import "./UserPage.css";
-import {PostList} from "../components/PostList.tsx";
+import {PostList} from "../components/postItems/PostList.tsx";
 import {Modal} from "../components/ui/Modal.tsx";
-import {FollowUsersList} from "../components/FollowUsersList.tsx";
-import {EditUserForm} from "../components/EditUserForm.tsx";
-import {AddEditPostForm} from "../components/AddEditPostForm.tsx";
+import {FollowUsersList} from "../components/userItems/FollowUsersList.tsx";
+import {EditUserForm} from "../components/userItems/EditUserForm.tsx";
+import {AddEditPostForm} from "../components/postItems/AddEditPostForm.tsx";
 import {useUserPosts} from "../context/UsersPostsContext.tsx";
 import {UnregisteredBox} from "../components/ui/UnregisteredBox.tsx";
 import {usePosts} from "../context/PostsContext.tsx";

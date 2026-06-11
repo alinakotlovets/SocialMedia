@@ -1,7 +1,7 @@
-import {useCurrentUserContext} from "../context/CurrentUserContext.tsx";
+import {useCurrentUserContext} from "../../context/CurrentUserContext.tsx";
 import {useState, useEffect} from "react";
-import {Sidebar} from "./ui/Sidebar.tsx";
-import {UnregisteredBox} from "./ui/UnregisteredBox.tsx";
+import {Sidebar} from "./Sidebar.tsx";
+import {UnregisteredBox} from "./UnregisteredBox.tsx";
 import {Outlet} from "react-router-dom";
 import {MobileMenu} from "./MobileMenu.tsx";
 export function LayoutContent() {

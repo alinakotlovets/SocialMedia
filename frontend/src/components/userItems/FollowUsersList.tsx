@@ -1,7 +1,7 @@
-import type {User} from "../types/User.ts"
+import type {User} from "../../types/User.ts"
 import {UserItem} from "./UserItem.tsx";
 import {useState} from "react";
-import {useInfiniteScrollOnScroll} from "../hooks/useInfiniteScroll.ts";
+import {useInfiniteScrollOnScroll} from "../../hooks/useInfiniteScroll.ts";
 import "./FollowUsersList.css"
 
 type FollowUsersListProps ={

@@ -1,5 +1,5 @@
-import type {Post} from "../types/Post.ts";
-import type {User} from "../types/User.ts";
+import type {Post} from "../../types/Post.ts";
+import type {User} from "../../types/User.ts";
 import {PostItem} from "./PostItem.tsx";
 import {ParentPost} from "./ParentPost.tsx";
 

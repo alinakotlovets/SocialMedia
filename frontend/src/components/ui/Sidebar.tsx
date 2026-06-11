@@ -9,7 +9,7 @@ import {useCurrentUserContext} from "../../context/CurrentUserContext.tsx";
 import {useNavigate} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
 import {usePosts} from "../../context/PostsContext.tsx";
-import {AddEditPostForm} from "../AddEditPostForm.tsx";
+import {AddEditPostForm} from "../postItems/AddEditPostForm.tsx";
 import {Modal} from "./Modal.tsx";
 
 export function Sidebar(){

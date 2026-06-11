@@ -1,11 +1,11 @@
-import type {Post} from "../types/Post.ts";
-import type {User} from "../types/User.ts";
+import type {Post} from "../../types/Post.ts";
+import type {User} from "../../types/User.ts";
 import {useState, useRef} from "react";
-import defaultAvatar from "../assets/defaultAvatar.png";
-import Client from "../api/client.ts";
+import defaultAvatar from "../../assets/defaultAvatar.png";
+import Client from "../../api/client.ts";
 import "./AddEditPostForm.css"
 import * as React from "react";
-import type {media} from "../types/Media.ts";
+import type {media} from "../../types/Media.ts";
 
 type AddEditPostFormProps={
     mode: "add" | "edit" | "reply",

@@ -1,6 +1,6 @@
 import {useState, useEffect, useRef} from "react";
 import Client from "../api/client.ts";
-import {UserItem} from "../components/UserItem.tsx";
+import {UserItem} from "../components/userItems/UserItem.tsx";
 import type {User} from "../types/User.ts";
 import {useNavigate} from "react-router-dom";
 import "./SearchPage.css"

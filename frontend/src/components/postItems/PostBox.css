@@ -37,6 +37,11 @@
 }
 
 .feed-btn-box button{
+    color: var(--text-h);
+    cursor: pointer;
+}
+
+.feed-btn-box button{
     background: transparent;
     border: none;
     padding: 16px 20px;

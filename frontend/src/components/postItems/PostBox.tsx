@@ -1,14 +1,14 @@
-import type {User} from "../types/User.ts";
+import type {User} from "../../types/User.ts";
 import {useEffect, useState} from "react";
-import {Modal} from "./ui/Modal.tsx";
+import {Modal} from "../ui/Modal.tsx";
 import {AddEditPostForm} from "./AddEditPostForm.tsx";
 import {PostItem} from "./PostItem.tsx";
-import {WhatsNewBox} from "./WhatsNewBox.tsx";
+import {WhatsNewBox} from "../ui/WhatsNewBox.tsx";
 import "./PostBox.css"
-import type {Post} from "../types/Post.ts";
-import Client from "../api/client.ts";
-import {usePosts} from "../context/PostsContext.tsx";
-import {useInfiniteScrollOnScroll} from "../hooks/useInfiniteScroll.ts";
+import type {Post} from "../../types/Post.ts";
+import Client from "../../api/client.ts";
+import {usePosts} from "../../context/PostsContext.tsx";
+import {useInfiniteScrollOnScroll} from "../../hooks/useInfiniteScroll.ts";
 
 type PostBoxProps = {
     currentUser: User | null

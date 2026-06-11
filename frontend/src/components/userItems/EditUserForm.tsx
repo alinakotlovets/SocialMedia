@@ -1,7 +1,7 @@
 import {useState} from "react";
 import * as React from "react";
-import Client from "../api/client.ts";
-import type {User} from "../types/User.ts";
+import Client from "../../api/client.ts";
+import type {User} from "../../types/User.ts";
 
 type EditUserFormProps = {
     user:User | null,

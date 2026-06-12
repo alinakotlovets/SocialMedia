@@ -7,6 +7,7 @@ import "./SearchPage.css"
 import SearchIcon from "../assets/search.png"
 import rightArrow from "../assets/right-arrow.png"
 import {useInfiniteScrollOnScroll} from "../hooks/useInfiniteScroll.ts";
+import {ErrorItem} from "../components/ui/ErrorItem.tsx";
 
 export function SearchPage(){
     const [inputValue, setInputValue] = useState<string>("");
@@ -20,6 +21,7 @@ export function SearchPage(){
         setLoading(true);
         setUsers([]);
         const trimmed = inputValue.trim();
+        setErrors([]);
         if (!trimmed) {
             setLoading(false)
             return;
@@ -76,13 +78,7 @@ export function SearchPage(){
                     </div>
                 </div>
             </div>
-            {errors.length > 0 && (
-                <ul>
-                    {errors.map((error, index) => (
-                        <li key={index}>{error}</li>
-                    ))}
-                </ul>
-            )}
+            <ErrorItem errors={errors}/>
             {!loading && (users.length > 0 || inputValue.trim() ) && (
                 <ul className="search-user-box">
                     <li onClick={() => navigate(`/posts/search?search=${encodeURIComponent(inputValue)}`)}

@@ -6,6 +6,7 @@ import Client from "../../api/client.ts";
 import "./AddEditPostForm.css"
 import * as React from "react";
 import type {media} from "../../types/Media.ts";
+import {ErrorItem} from "../ui/ErrorItem.tsx";
 
 type AddEditPostFormProps={
     mode: "add" | "edit" | "reply",
@@ -97,7 +98,10 @@ export function AddEditPostForm({mode, post, currentUser, onSuccess,
                         className="add-edit-textarea"
                         placeholder="What's happening?"
                         value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
+                        onChange={(e) => {
+                            setInputValue(e.target.value);
+                            if (errors.length > 0) setErrors([]);
+                        }}
                     />
                     <ul className="media-preview">
                         {existingMedia.map((m) => (
@@ -156,13 +160,7 @@ export function AddEditPostForm({mode, post, currentUser, onSuccess,
                 </button>
             </div>
 
-            {errors.length > 0 && (
-                <ul className="add-edit-errors">
-                    {errors.map((e, i) => (
-                        <li className="text-s" key={i}>{e}</li>
-                    ))}
-                </ul>
-            )}
+            <ErrorItem errors={errors}/>
         </form>
     )
 }

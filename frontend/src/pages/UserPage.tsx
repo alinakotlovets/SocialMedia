@@ -15,6 +15,7 @@ import {useUserPosts} from "../context/UsersPostsContext.tsx";
 import {UnregisteredBox} from "../components/ui/UnregisteredBox.tsx";
 import {usePosts} from "../context/PostsContext.tsx";
 import {useInfiniteScrollOnScroll} from "../hooks/useInfiniteScroll.ts";
+import {ErrorItem} from "../components/ui/ErrorItem.tsx";
 
 export function UserPage(){
     const {userId} = useParams();
@@ -72,6 +73,7 @@ export function UserPage(){
         setLoadedFollowers(false);
         setLoadedFollowing(false);
         async function fetchAll() {
+            setErrors([])
             setIsInitialLoading(true);
             setLoading({ posts: true, likedPosts: true, replies: true });
 
@@ -292,13 +294,8 @@ export function UserPage(){
                             <h3>Loading...</h3>
                         </div>
                 )}
-                {errors.length > 0 && (
-                    <ul className="add-edit-errors">
-                        {errors.map((e, i) => (
-                            <li className="text-s" key={i}>{e}</li>
-                        ))}
-                    </ul>
-                )}
+
+                <ErrorItem errors={errors}/>
 
 
                 {!loading.posts && user && (

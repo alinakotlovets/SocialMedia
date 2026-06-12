@@ -11,6 +11,7 @@ import {ParentPost} from "../components/postItems/ParentPost.tsx";
 import {useCurrentUserContext} from "../context/CurrentUserContext.tsx";
 import {usePosts} from "../context/PostsContext.tsx";
 import {useInfiniteScrollOnScroll} from "../hooks/useInfiniteScroll.ts";
+import {ErrorItem} from "../components/ui/ErrorItem.tsx";
 
 export function PostPage(){
     const { postId } = useParams();
@@ -30,6 +31,7 @@ export function PostPage(){
 
     useEffect(() => {
         async function getPost(){
+            setErrors([]);
             setLoading((prev) => ({ ...prev, post: true }));
             const response =  await Client(`/posts/${postId}`, "GET");
             if(response.errors) setErrors(response.errors);
@@ -53,13 +55,14 @@ export function PostPage(){
         setLoading((prev)=>({...prev, replies:true}))
         async function getReplies(){
             if(!post) return;
+            setErrors([]);
             const response = await Client(`/posts/${post.id}/replies`, "GET");
             if (response.errors) setErrors(response.errors);
             if(response.replies) setReplies(response.replies);
+            setLoading((prev)=>({...prev, replies:false}));
 
         }
         getReplies();
-        setLoading((prev)=>({...prev, replies:false}))
 
     }, [post]);
 
@@ -80,13 +83,7 @@ export function PostPage(){
                 </div>
             )}
 
-            {errors.length > 0 && (
-                <ul className="add-edit-errors">
-                    {errors.map((e, i) => (
-                        <li className="text-s" key={i}>{e}</li>
-                    ))}
-                </ul>
-            )}
+            <ErrorItem errors={errors}/>
 
             {isAddEdit && (
                 <Modal onClose={()=>{setIsAddEdit(false); setEditingPost(null)}} closeOnOverlayClick={true}>

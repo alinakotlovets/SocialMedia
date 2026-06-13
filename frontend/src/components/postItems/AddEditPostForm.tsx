@@ -27,53 +27,59 @@ export function AddEditPostForm({mode, post, currentUser, onSuccess,
     );
     const totalMedia = existingMedia.length + newMedia.length;
     const isSubmittingRef = useRef(false);
+
+    function createFormData() {
+        const formData = new FormData();
+
+        newMedia.forEach(item => formData.append("media", item.file));
+        formData.append("text", inputValue);
+
+        return formData;
+    }
     async function handleAddEditPost(e: React.SubmitEvent<HTMLFormElement>) {
         e.preventDefault();
         if(isSubmittingRef.current) return;
-        isSubmittingRef.current = true;
-        setErrors([]);
-        setIsLoading(true);
-        if (mode === "add"){
-            const formData =new FormData();
-            newMedia.forEach(item => formData.append("media", item.file));
-            formData.append("text", inputValue);
-            const result = await Client("/posts",
-                "POST", formData);
+        try {
+            isSubmittingRef.current = true;
+            setErrors([]);
+            setIsLoading(true);
+            if (mode === "add"){
+                const formData = createFormData();
+                const result = await Client("/posts",
+                    "POST", formData);
 
-            if(result.errors) setErrors(result.errors);
+                if(result.errors) setErrors(result.errors);
 
-            if(result.post){
-                onSuccess(result.post);
-                setInputValue("");
-                setIsAddEditPost(false);
+                if(result.post){
+                    onSuccess(result.post);
+                    setInputValue("");
+                    setIsAddEditPost(false);
+                }
             }
-        }
-        if(mode === "reply" && post) {
-            const formData =new FormData();
-            newMedia.forEach(item => formData.append("media", item.file));
-            formData.append("text", inputValue);
-            const result= await  Client(`/posts/${post.id}/replies`, "POST", formData);
-            if (result.errors) setErrors(result.errors);
-            if (result.post){
-                onSuccess(result.post)
-                setIsAddEditPost(false);
+            else if(mode === "reply" && post) {
+                const formData = createFormData();
+                const result= await  Client(`/posts/${post.id}/replies`, "POST", formData);
+                if (result.errors) setErrors(result.errors);
+                if (result.post){
+                    onSuccess(result.post)
+                    setIsAddEditPost(false);
+                }
             }
-        }
-        if (mode === "edit" && post) {
-            const formData =new FormData();
-            formData.append("keepMediaIds", JSON.stringify(existingMedia.map(m => m.id)));
-            newMedia.forEach(item => formData.append("media", item.file));
-            formData.append("text", inputValue);
-            const result = await Client(`/posts/${post.id}`,
-                "PUT", formData);
-            if (result.errors) setErrors(result.errors);
-            if (result.post) {
-                onSuccess(result.post);
-                setIsAddEditPost(false);
+            else if (mode === "edit" && post) {
+                const formData = createFormData();
+                formData.append("keepMediaIds", JSON.stringify(existingMedia.map(m => m.id)));
+                const result = await Client(`/posts/${post.id}`,
+                    "PUT", formData);
+                if (result.errors) setErrors(result.errors);
+                if (result.post) {
+                    onSuccess(result.post);
+                    setIsAddEditPost(false);
+                }
             }
+        } finally {
+            isSubmittingRef.current = false;
+            setIsLoading(false);
         }
-        isSubmittingRef.current = false;
-        setIsLoading(false);
     }
 
     return (

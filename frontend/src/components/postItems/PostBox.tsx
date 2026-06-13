@@ -9,6 +9,7 @@ import type {Post} from "../../types/Post.ts";
 import Client from "../../api/client.ts";
 import {usePosts} from "../../context/PostsContext.tsx";
 import {useInfiniteScrollOnScroll} from "../../hooks/useInfiniteScroll.ts";
+import {ErrorItem} from "../ui/ErrorItem.tsx";
 
 type PostBoxProps = {
     currentUser: User | null
@@ -33,7 +34,7 @@ export function PostBox({currentUser}:PostBoxProps){
     async function getFollowingPosts(cursorId: number |null){
         const url = cursorId ? `/posts/following?cursorId=${cursorId}` : `/posts/following`;
         const response = await Client(url, "GET");
-        if (response.errors) setErrors((prev)=>({...prev, followingPosts:response.errors}));
+        if (response.errors) setErrors((prev)=>({...prev, following:response.errors}));
         if (response.posts) setFollowing(response.posts);
     }
 
@@ -54,6 +55,24 @@ export function PostBox({currentUser}:PostBoxProps){
         textRes: "posts"
     });
 
+    function handleDelete(id:number) {
+        setActivePosts(posts.filter(p => p.id !== id))
+    }
+
+    function handleEdit(post:Post){
+        setEditingPost(post);
+        setIsAddEditPost(true);
+    }
+
+    function handleEditPostSuccess(newPost:Post){
+        if (editingPost) {
+            setActivePosts(posts.map(p => p.id === newPost.id ? newPost : p));
+        } else {
+            setPosts([newPost, ...posts]);
+        }
+        setEditingPost(null);
+    }
+
     return(
         <div  className="post-box">
             {currentUser &&(
@@ -71,14 +90,7 @@ export function PostBox({currentUser}:PostBoxProps){
                     <AddEditPostForm mode={editingPost ? "edit" : "add"}
                                      post={editingPost}
                                      currentUser={currentUser}
-                                     onSuccess={(newPost) => {
-                                         if (editingPost) {
-                                             setActivePosts(posts.map(p => p.id === newPost.id ? newPost : p));
-                                         } else {
-                                             setPosts([newPost, ...posts]);
-                                         }
-                                         setEditingPost(null);
-                                     }}
+                                     onSuccess={(newPost) => handleEditPostSuccess(newPost)}
                                      setIsAddEditPost={setIsAddEditPost}
                     />
                 </Modal>
@@ -89,13 +101,9 @@ export function PostBox({currentUser}:PostBoxProps){
             )}
 
             <div>
-                {errors[feedType].length>0 &&(
-                    <ul>
-                        {errors[feedType].map((e, i)=>
-                            <li key={i}>{e}</li>
-                        )}
-                    </ul>
-                )}
+
+                <ErrorItem errors={errors[feedType]}/>
+
                 {activePosts.length>0 &&(
                     <ul className="post-list">
                         {activePosts.map((post)=>
@@ -105,11 +113,8 @@ export function PostBox({currentUser}:PostBoxProps){
                                      setActiveVideoId={setActiveVideoId}
                                      activeVideoId={activeVideoId}
                                      repliesCount={post._count.replies}
-                                     onEdit={(post) => {
-                                         setEditingPost(post);
-                                         setIsAddEditPost(true);
-                                     }}
-                                     onDelete={(id) => setActivePosts(posts.filter(p => p.id !== id))}
+                                     onEdit={handleEdit}
+                                     onDelete={()=>handleDelete(post.id)}
                            />
                         )}
                     </ul>
